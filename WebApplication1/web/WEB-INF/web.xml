@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!-- 
+Universidad de los Andes (Bogotá - Colombia)
+Departamento de Ingeniería de Sistemas y Computación 
+Licenciado bajo el esquema Academic Free License version 2.1 
+
+Proyecto Cupi2 (http://cupi2.uniandes.edu.co)
+Ejercicio: n18_colegioWeb
+Autor: Pablo Barvo - 08-Feb-2006 
+-->
+
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+    <description>Servlets Cupicolegio</description>
+   
+   <!-- SERVLETS -->
+
+ <servlet>
+  <servlet-name>hola</servlet-name>
+  <servlet-class>Interfaz.pacho</servlet-class>
+ </servlet>
+ 
+ 
+ 
+ <!-- MAPPING -->
+ 
+ <servlet-mapping>
+  <servlet-name>hola</servlet-name>
+  <url-pattern>/hola.htm</url-pattern>
+ </servlet-mapping>
+ 
+	
+   
+</web-app>
