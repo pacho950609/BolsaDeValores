@@ -24,6 +24,30 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-class>Interfaz.pacho</servlet-class>
  </servlet>
  
+ <servlet>
+  <servlet-name>ServletOrdenarOperacionBursatil</servlet-name>
+  <servlet-class>Interfaz.ServletOrdenarOperacionBursatil</servlet-class>
+ </servlet>
+ 
+ <servlet>
+  <servlet-name>ServletCancelarOrdenOperacionBursatil</servlet-name>
+  <servlet-class>Interfaz.ServletCancelarOrdenOperacionBursatil</servlet-class>
+ </servlet>
+ 
+ <servlet>
+  <servlet-name>ServletRegistrarOperacionBursatil</servlet-name>
+  <servlet-class>Interfaz.ServletRegistrarOperacionBursatil</servlet-class>
+ </servlet>
+ 
+  <servlet>
+  <servlet-name>ServletRegistrarTipoDeValor</servlet-name>
+  <servlet-class>Interfaz.ServletRegistrarTipoDeValor</servlet-class>
+ </servlet>
+ 
+  <servlet>
+  <servlet-name>ServletRegistrarTipoRentabilidad</servlet-name>
+  <servlet-class>Interfaz.ServletRegistrarTipoRentabilidad</servlet-class>
+ </servlet>
  
  
  <!-- MAPPING -->
@@ -33,6 +57,30 @@ Autor: Pablo Barvo - 08-Feb-2006
   <url-pattern>/hola.htm</url-pattern>
  </servlet-mapping>
  
+  <servlet-mapping>
+  <servlet-name>ServletOrdenarOperacionBursatil</servlet-name>
+  <url-pattern>/ServletOrdenarOperacionBursatil.htm</url-pattern>
+ </servlet-mapping>
+ 
+  <servlet-mapping>
+  <servlet-name>ServletCancelarOrdenOperacionBursatil</servlet-name>
+  <url-pattern>/ServletCancelarOrdenOperacionBursatil.htm</url-pattern>
+ </servlet-mapping>
+ 
+  <servlet-mapping>
+  <servlet-name>ServletRegistrarOperacionBursatil</servlet-name>
+  <url-pattern>/ServletRegistrarOperacionBursatil.htm</url-pattern>
+ </servlet-mapping>
+ 
+  <servlet-mapping>
+  <servlet-name>ServletRegistrarTipoDeValor</servlet-name>
+  <url-pattern>/ServletRegistrarTipoDeValor.htm</url-pattern>
+ </servlet-mapping>
+ 
+  <servlet-mapping>
+  <servlet-name>ServletRegistrarTipoRentabilidad</servlet-name>
+  <url-pattern>/ServletRegistrarTipoRentabilidad.htm</url-pattern>
+ </servlet-mapping>
 	
    
 </web-app>

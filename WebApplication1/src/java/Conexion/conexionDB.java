@@ -37,7 +37,7 @@ public class conexionDB {
                  try{
                 Class.forName("oracle.jdbc.OracleDriver");
                 String BaseDeDatos = "jdbc:oracle:thin:@prod.oracle.virtual.uniandes.edu.co:1531:prod";
-                Connection conexionP= DriverManager.getConnection(BaseDeDatos,"ISIS2304291420","inferided85");
+                Connection conexionP= DriverManager.getConnection(BaseDeDatos,"ISIS2304071420","obtenerse50b9");
                 if(conexionP!=null)
                 {
                 System.out.println("Conexion exitosa a esquema HR");
