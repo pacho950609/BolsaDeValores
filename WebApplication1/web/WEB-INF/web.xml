@@ -49,6 +49,11 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-class>Interfaz.ServletRegistrarTipoRentabilidad</servlet-class>
  </servlet>
  
+ <servlet>
+  <servlet-name>ServletEliminaOrden</servlet-name>
+  <servlet-class>Interfaz.ServletEliminaOrden</servlet-class>
+ </servlet>
+ 
  
  <!-- MAPPING -->
  
@@ -80,6 +85,11 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-mapping>
   <servlet-name>ServletRegistrarTipoRentabilidad</servlet-name>
   <url-pattern>/ServletRegistrarTipoRentabilidad.htm</url-pattern>
+ </servlet-mapping>
+ 
+ <servlet-mapping>
+  <servlet-name>ServletEliminaOrden</servlet-name>
+  <url-pattern>/ServletEliminaOrden.htm</url-pattern>
  </servlet-mapping>
 	
    

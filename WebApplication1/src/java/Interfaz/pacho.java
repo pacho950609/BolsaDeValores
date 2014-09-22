@@ -45,23 +45,19 @@ public class pacho extends  HttpServlet{
 	    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
                 
-                    try {
-                        conexionDB x = new conexionDB();
-                        ResultSet rta = x.consultar("SELECT * FROM USUARIO");
-                        
+                  
+                       
+                         String id = request.getParameter( "id" );
                         
                         // Maneja el GET y el POST de la misma manera
                         PrintWriter respuesta = response.getWriter() ;
                         respuesta.write( "<html>\r\n" );
-                        while(rta.next())
-                        {
+                       
                             
-                            respuesta.write(rta.getString("NOMBRE")+ "<br>" );
-                        }
+                            respuesta.write(id );
+                        
                         respuesta.write( "</html>\r\n" );
-                    } catch (SQLException ex) {
-                        Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    
 	    	
 	    }
 		
