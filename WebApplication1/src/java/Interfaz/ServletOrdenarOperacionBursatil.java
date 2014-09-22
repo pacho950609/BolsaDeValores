@@ -99,10 +99,12 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                             String emailOferente = request.getParameter( "emailOferente" );
                               String emailIntermediario = request.getParameter( "emailIntermediario" );
                             String nombreValor = request.getParameter( "nombreValor" );
+                            String nit = request.getParameter( "nit" );
+                             String precio = request.getParameter( "precio" );
                             int cantidad = Integer.parseInt(request.getParameter( "cantidad" ));
-                            String fecha = "fecha";
+                          
                             //realiza las validaciones correspondientes
-                            Validaciones.validarOrdenarOperacionBursatilPrimario(emailOferente, nombreValor, cantidad, fecha);
+                        
                             //conexion base de datos
                              conexionDB x = new conexionDB();
                              boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
@@ -110,27 +112,15 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                            
                             respuesta.write( "<html>\r\n" );
                         
-                            if(rta)
-                            {
-                                //en caso que se halla agregado exitosamente
-                                 respuesta.write("Ha terminado exitosamente "); 
-                            }
-                            
-                          else
-                            {
-                                //caso no se logro terminar 
-                                respuesta.write("No tienes los permisos correspondiente"); 
-                            }
+                           respuesta.write(emailOferente+emailIntermediario+nit+cantidad);
+                           respuesta.write(precio);
                         
                         respuesta.write( "</html>\r\n" );
                    } 
                    
                    
                    
-                   catch (SQLException ex) 
-                    {
-                        Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                  
                    
                    catch (Exception e )
                    {
