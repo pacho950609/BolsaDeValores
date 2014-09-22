@@ -6,6 +6,7 @@
 package Interfaz;
 
 import Conexion.conexionDB;
+import Mundo.Validaciones;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -26,17 +27,56 @@ public class ServletOrdenarOperacionBursatil extends HttpServlet{
     
 	
 		
-		
-		protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
+protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
-	        // Maneja el GET y el POST de la misma manera
+	        // secundario
+                             PrintWriter respuesta = response.getWriter() ;
+                           
 			
-       
+                            try{
+                                 String email = request.getParameter( "email" );
+                            String nombreValor = request.getParameter( "nombreValor" );
+                            int cantidad = Integer.parseInt(request.getParameter( "monto" ));
+                            int montoDinero = Integer.parseInt(request.getParameter( "cantidadDinero" ));
+                            String comprarVender =request.getParameter( "comprarVender" );
+                            String empresa =request.getParameter( "empresa" );
+                            String fecha = "fecha";
+                    
+                            Validaciones.validarOrdenarOperacionBursatilSecundario(email, nombreValor, cantidad, fecha, comprarVender, empresa, montoDinero);
+                            //conexion base de datos
+                             conexionDB x = new conexionDB();
+                             boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
+                        
+                           
+                            respuesta.write( "<html>\r\n" );
+                        
+                            if(rta)
+                            {
+                                //en caso que se halla agregado exitosamente
+                                 respuesta.write("Ha terminado exitosamente "); 
+                            }
+                            
+                          else
+                            {
+                                //caso no se logro terminar 
+                                respuesta.write("No tienes los permisos correspondiente"); 
+                            }
+                        
+                        respuesta.write( "</html>\r\n" );
+                        
+                        
+                            }
                 
-			PrintWriter respuesta = response.getWriter() ;
-			respuesta.write( "<html>\r\n" );
-	    	respuesta.write("esdsd " );
-	    	respuesta.write( "</html>\r\n" );
+		 catch (SQLException ex) 
+                    {
+                        Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                   
+                   catch (Exception e )
+                   {
+                    respuesta.write(e.getMessage());    
+                   }
+	    	
 	    	
 	        
 	    }
@@ -45,33 +85,60 @@ public class ServletOrdenarOperacionBursatil extends HttpServlet{
 	     * @param request Pedido del cliente
 	     * @param response Respuesta
 	     */
+      
+      
+      
 	    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
                 
-                    try {
-                        conexionDB x = new conexionDB();
-                        ResultSet rta = x.consultar("SELECT * FROM PARRANDEROS.BARES");
+                //primario 
+                 PrintWriter respuesta = response.getWriter() ;
+                
+                   try {
+                           
+                            String emailOferente = request.getParameter( "emailOferente" );
+                              String emailIntermediario = request.getParameter( "emailIntermediario" );
+                            String nombreValor = request.getParameter( "nombreValor" );
+                            int cantidad = Integer.parseInt(request.getParameter( "cantidad" ));
+                            String fecha = "fecha";
+                            //realiza las validaciones correspondientes
+                            Validaciones.validarOrdenarOperacionBursatilPrimario(emailOferente, nombreValor, cantidad, fecha);
+                            //conexion base de datos
+                             conexionDB x = new conexionDB();
+                             boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
                         
+                           
+                            respuesta.write( "<html>\r\n" );
                         
-                        // Maneja el GET y el POST de la misma manera
-                        PrintWriter respuesta = response.getWriter() ;
-                        respuesta.write( "<html>\r\n" );
-                        while(rta.next())
-                        {
+                            if(rta)
+                            {
+                                //en caso que se halla agregado exitosamente
+                                 respuesta.write("Ha terminado exitosamente "); 
+                            }
                             
-                            respuesta.write(rta.getString("NOMBRE")+ "<br>" );
-                        }
+                          else
+                            {
+                                //caso no se logro terminar 
+                                respuesta.write("No tienes los permisos correspondiente"); 
+                            }
+                        
                         respuesta.write( "</html>\r\n" );
-                    } catch (SQLException ex) {
+                   } 
+                   
+                   
+                   
+                   catch (SQLException ex) 
+                    {
                         Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                   
+                   catch (Exception e )
+                   {
+                       respuesta.write(e.getMessage()); 
+                   }
 	    	
 	    }
 		
-		
-		
-    
-    
-    
+		    
     
 }

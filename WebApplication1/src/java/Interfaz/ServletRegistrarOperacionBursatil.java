@@ -6,6 +6,7 @@
 package Interfaz;
 
 import Conexion.conexionDB;
+import Mundo.TipoDeValor;
 import Mundo.Validaciones;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,55 +28,8 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
     
       protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
-	        // secundario
-                             PrintWriter respuesta = response.getWriter() ;
-                           
-			
-                            try{
-                                 String email = request.getParameter( "email" );
-                            String nombreValor = request.getParameter( "nombreValor" );
-                            int cantidad = Integer.parseInt(request.getParameter( "monto" ));
-                            int montoDinero = Integer.parseInt(request.getParameter( "cantidadDinero" ));
-                            String comprarVender =request.getParameter( "comprarVender" );
-                            String empresa =request.getParameter( "empresa" );
-                            String fecha = "fecha";
-                    
-                            Validaciones.validarOrdenarOperacionBursatilSecundario(email, nombreValor, cantidad, fecha, comprarVender, empresa, montoDinero);
-                            //conexion base de datos
-                             conexionDB x = new conexionDB();
-                             boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
-                        
-                           
-                            respuesta.write( "<html>\r\n" );
-                        
-                            if(rta)
-                            {
-                                //en caso que se halla agregado exitosamente
-                                 respuesta.write("Ha terminado exitosamente "); 
-                            }
-                            
-                          else
-                            {
-                                //caso no se logro terminar 
-                                respuesta.write("No tienes los permisos correspondiente"); 
-                            }
-                        
-                        respuesta.write( "</html>\r\n" );
-                        
-                        
-                            }
-                
-		 catch (SQLException ex) 
-                    {
-                        Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                   
-                   catch (Exception e )
-                   {
-                    respuesta.write(e.getMessage());    
-                   }
-	    	
-	    	
+	        // Maneja el GET y el POST de la misma manera
+	
 	        
 	    }
 		/**
@@ -83,60 +37,57 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
 	     * @param request Pedido del cliente
 	     * @param response Respuesta
 	     */
-      
-      
-      
 	    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
                 
-                //primario 
-                 PrintWriter respuesta = response.getWriter() ;
                 
-                   try {
-                           
-                            String email = request.getParameter( "email" );
-                            String nombreValor = request.getParameter( "nombreValor" );
-                            int cantidad = Integer.parseInt(request.getParameter( "cantidad" ));
-                            String fecha = "fecha";
-                            //realiza las validaciones correspondientes
-                            Validaciones.validarOrdenarOperacionBursatilPrimario(email, nombreValor, cantidad, fecha);
-                            //conexion base de datos
-                             conexionDB x = new conexionDB();
-                             boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
+                
+                
+                try{
+                    
+                    //valida los datos
+                String nombre = request.getParameter( "nombre" );
+                String descripcion = request.getParameter( "descripcion" );
+                int identifiador = Integer.parseInt(request.getParameter( "identificador" ));
+                TipoDeValor.validarDatos(identifiador, nombre, descripcion);
+                
+                
+                
+                        conexionDB x = new conexionDB();
+                        boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
                         
-                           
-                            respuesta.write( "<html>\r\n" );
+                        
+                        // Maneja el GET y el POST de la misma manera
+                        PrintWriter respuesta = response.getWriter() ;
+                        respuesta.write( "<html>\r\n" );
                         
                             if(rta)
                             {
-                                //en caso que se halla agregado exitosamente
-                                 respuesta.write("Ha terminado exitosamente "); 
+                                 respuesta.write("ha sido agregada exitosamente"); 
                             }
                             
                           else
                             {
-                                //caso no se logro terminar 
-                                respuesta.write("No tienes los permisos correspondiente"); 
+                                respuesta.write("ha ocurrido algun error"); 
                             }
                         
                         respuesta.write( "</html>\r\n" );
-                   } 
-                   
-                   
-                   
-                   catch (SQLException ex) 
-                    {
-                        Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                   
-                   catch (Exception e )
-                   {
-                       respuesta.write(e.getMessage()); 
-                   }
+                        
+                }
+                catch(Exception e)
+                        {
+                            
+                            
+                            
+                            
+                        }
+                 
 	    	
 	    }
 		
 		
+		
+    
 		
     
     

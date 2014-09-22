@@ -47,7 +47,7 @@ public class pacho extends  HttpServlet{
                 
                     try {
                         conexionDB x = new conexionDB();
-                        ResultSet rta = x.consultar("SELECT * FROM PARRANDEROS.BARES");
+                        ResultSet rta = x.consultar("SELECT * FROM USUARIO");
                         
                         
                         // Maneja el GET y el POST de la misma manera
