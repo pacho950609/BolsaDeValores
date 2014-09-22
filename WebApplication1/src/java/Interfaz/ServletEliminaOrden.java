@@ -23,14 +23,27 @@ public class ServletEliminaOrden extends  HttpServlet{
     	
 		protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
-	        // Maneja el GET y el POST de la misma manera
+	      
 			
        
-                
-			PrintWriter respuesta = response.getWriter() ;
-			respuesta.write( "<html>\r\n" );
-	    	respuesta.write("esdsd " );
-	    	respuesta.write( "</html>\r\n" );
+                  //BORRA UNO SECUNDARIO
+                       
+                         String id = request.getParameter( "id" );
+                         String sentancia="DELETE FROM OPERACIONES_EN_ESPERA_SEC WHERE ID='"+id+"'";
+                         PrintWriter respuesta = response.getWriter() ;
+                         conexionDB x = new conexionDB();
+                         
+                        boolean rta= x.actualizarCrear(sentancia);
+                         if(rta)
+                         {
+                             String mensaje="Se ha borrado exitosamente la orden";
+                             imprimirhtmlprimario(respuesta, mensaje);
+                         }
+                         else{
+                              String mensaje="no se ha podido borrar la orden";
+                              imprimirhtmlprimario(respuesta, mensaje);
+                         }
+                    
 	    	
 	        
 	    }
@@ -132,12 +145,18 @@ public class ServletEliminaOrden extends  HttpServlet{
                 respuesta.write( "        <div class=\"col-sm-3 col-md-2 sidebar\">\r\n" );
                 respuesta.write( "          <ul class=\"nav nav-sidebar\">\r\n" );
                 respuesta.write( "              <li ><a href=\"./ordenarOperacionPrim.htm\">Ordenar operación primaria</a></li>\r\n" );
-                respuesta.write( "            <li><a href=\"./ordenarOperacionSec.htm\">Ordenar operación secundaria</a></li>\r\n" );
-                respuesta.write( "            <li class=\"active\"><a href=\"./cancelarOperacion.htm\">Cancelar operación bursátil</a></li>\r\n" );
-                respuesta.write( "            <li><a href=\"./registrarOperacionPrim.htm\">Registrar operación primaria</a></li>\r\n" );
-                respuesta.write( "             <li><a href=\"./registrarOperacionSec.htm\">Registrar operación secundaria</a></li>\r\n" );
-                respuesta.write( "           \r\n" );
-                respuesta.write( "          </ul>\r\n" );
+respuesta.write( "            <li><a href=\"./ordenarOperacionSec.htm\">Ordenar operación secundaria</a></li>\r\n" );
+respuesta.write( "            <li class=\"active\"><a href=\"./cancelarOperacion.htm\">Cancelar operación bursátil</a></li>\r\n" );
+respuesta.write( "            <li><a href=\"./registrarOperacion.htm\">Registrar operación </a></li>\r\n" );
+respuesta.write( "          \r\n" );
+respuesta.write( "          </ul>\r\n" );
+respuesta.write( "          <ul class=\"nav nav-sidebar\">\r\n" );
+respuesta.write( "            <li><a href=\"./consultarExistencia.htm\">Consultar existencia de valores</a></li>\r\n" );
+respuesta.write( "            <li><a href=\"./consultarOperacion.htm\">Consultar operaciones de un usuario</a></li>\r\n" );
+respuesta.write( "            <li><a href=\"./consultarValores.htm\">Consultar valores con mayor movimiento</a></li>\r\n" );
+respuesta.write( "            <li><a href=\"./consultarIntermediario.htm\">Consultar intermedario mas activo</a></li>\r\n" );
+respuesta.write( "          </ul>\r\n" );
+                
                 respuesta.write( "          <ul class=\"nav nav-sidebar\">\r\n" );
                 respuesta.write( "            <li><a href=\"./consultarExistencia.htm\">Consultar existencia de valores</a></li>\r\n" );
                 respuesta.write( "            <li><a href=\"./consultarOperacion.htm\">Consultar operaciones de un usuario</a></li>\r\n" );
@@ -152,7 +171,7 @@ public class ServletEliminaOrden extends  HttpServlet{
                 respuesta.write( "          \r\n" );
                 respuesta.write( "    <!-- Bootstrap core JavaScript\r\n" );
                 respuesta.write( "    ================================================== -->\r\n" );
-                respuesta.write( "          <h2 >"+mensaje+"</h2>\r\n" );
+                respuesta.write( "          <h3 >"+mensaje+"</h3 >\r\n" );
                 respuesta.write( "    <!-- Placed at the end of the document so the pages load faster -->\r\n" );
                 respuesta.write( "    <script src=\"./Dashboard Template for Bootstrap_files/jquery.min.js\"></script>\r\n" );
                 respuesta.write( "    <script src=\"./Dashboard Template for Bootstrap_files/bootstrap.min.js\"></script>\r\n" );
