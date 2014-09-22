@@ -107,19 +107,32 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                         
                             //conexion base de datos
                              conexionDB x = new conexionDB();
-                             boolean rta = x.actualizarCrear("SELECT * FROM PARRANDEROS.BARES");
+                            ResultSet maximoid= x.consultar("SELECT MAX (ID) FROM  OPERACIONES_EN_ESPERA_PRIM ");
+                            int nuevoid=0;
+                            if(maximoid.next())
+                            {
+                             nuevoid = Integer.parseInt(maximoid.getString("MAX(ID)"))+1 ;
+                              
+                            }
+                            String sqlS="INSERT INTO OPERACIONES_EN_ESPERA_PRIM VALUES("
+                             +nuevoid +",'"+emailOferente + "','"+emailIntermediario+"'," +nit+",'"+nombreValor+"',"+precio+","+cantidad+",(SELECT SYSDATE FROM DUAL))";
+                             boolean rta = x.actualizarCrear(sqlS);
                         
                            
                             respuesta.write( "<html>\r\n" );
                         
                             if(rta)
                             {
-                           respuesta.write(emailOferente+emailIntermediario+nit+cantidad+nombreValor);
-                           respuesta.write(precio);
+                           respuesta.write(sqlS);
+                             respuesta.write( "El id max es"+nuevoid );
+                    
                             respuesta.write("quedo bien");
                             }
                             else
                             {
+                                 respuesta.write(sqlS);
+                                  respuesta.write(emailOferente+emailIntermediario+nit+cantidad+nombreValor);
+                                    respuesta.write( "El id max es"+nuevoid );
                                 respuesta.write("quedo mal  bien jajaja");
                             }
                         
