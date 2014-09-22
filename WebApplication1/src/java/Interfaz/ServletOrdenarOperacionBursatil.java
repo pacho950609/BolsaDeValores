@@ -98,7 +98,7 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                            
                             String emailOferente = request.getParameter( "emailOferente" );
                               String emailIntermediario = request.getParameter( "emailIntermediario" );
-                            String nombreValor = request.getParameter( "nombreValor" );
+                            String nombreValor = request.getParameter( "tipoValor" );
                             String nit = request.getParameter( "nit" );
                              String precio = request.getParameter( "precio" );
                             int cantidad = Integer.parseInt(request.getParameter( "cantidad" ));
@@ -112,8 +112,16 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                            
                             respuesta.write( "<html>\r\n" );
                         
-                           respuesta.write(emailOferente+emailIntermediario+nit+cantidad);
+                            if(rta)
+                            {
+                           respuesta.write(emailOferente+emailIntermediario+nit+cantidad+nombreValor);
                            respuesta.write(precio);
+                            respuesta.write("quedo bien");
+                            }
+                            else
+                            {
+                                respuesta.write("quedo mal  bien jajaja");
+                            }
                         
                         respuesta.write( "</html>\r\n" );
                    } 
