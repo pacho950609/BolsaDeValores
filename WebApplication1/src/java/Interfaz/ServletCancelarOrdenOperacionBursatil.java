@@ -219,8 +219,7 @@ public class ServletCancelarOrdenOperacionBursatil extends  HttpServlet{
     
     private void enviarhtmlSecundario(PrintWriter respuesta , ResultSet rta)
     {
-        
-                    respuesta.write( "<!DOCTYPE html>\r\n" );
+             respuesta.write( "<!DOCTYPE html>\r\n" );
                     respuesta.write( "<!-- saved from url=(0044)http://getbootstrap.com/examples/dashboard/? -->\r\n" );
                     respuesta.write( "<html lang=\"en\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n" );
                     respuesta.write( "    <meta charset=\"utf-8\">\r\n" );
@@ -303,26 +302,49 @@ public class ServletCancelarOrdenOperacionBursatil extends  HttpServlet{
                     respuesta.write( "          <div class=\"row placeholders\">\r\n" );
                     
                     respuesta.write( "          </div>\r\n" );
-                    respuesta.write( "          <h2 class=\"sub-header\">Ordenes de operaciones bursatiles secundarias</h2>\r\n" );
+                    respuesta.write( "          <h2 class=\"sub-header\">Ordenes de operaciones bursatiles primarias</h2>\r\n" );
                     respuesta.write( "          <div class=\"table-responsive\">\r\n" );
                     respuesta.write( "            <table class=\"table table-striped\">\r\n" );
                     respuesta.write( "              <thead>\r\n" );
                     respuesta.write( "                <tr>\r\n" );
-                    respuesta.write( "                  <th>#</th>\r\n" );
-                    respuesta.write( "                  <th>Header</th>\r\n" );
-                    respuesta.write( "                  <th>Header1</th>\r\n" );
-                    respuesta.write( "                  <th>Header2</th>\r\n" );
-                    respuesta.write( "                  <th>Header3</th>\r\n" );
-                    respuesta.write( "                </tr>\r\n" );
-                    respuesta.write( "              </thead>\r\n" );
-                    respuesta.write( "              <tbody>\r\n" );
-                    respuesta.write( "                <tr>\r\n" );
-                    respuesta.write( "                  <td>1,001</td>\r\n" );
-                    respuesta.write( "                  <td>Lorem</td>\r\n" );
-                    respuesta.write( "                  <td>ipsum</td>\r\n" );
-                    respuesta.write( "                  <td>dolor</td>\r\n" );
-                    respuesta.write( "                  <td>sit</td>\r\n" );
-                    respuesta.write( "                </tr>\r\n" );
+                    respuesta.write( "                  <th>Email Invercionista</th>\r\n" );
+                    respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
+                    respuesta.write( "                  <th>Tipo Operacion</th>\r\n" );
+                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Valor</th>\r\n" );
+                    respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
+                    respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                    respuesta.write( "                  <th>Fecha</th>\r\n" );
+                    respuesta.write( "                  <th>Eliminar</th>\r\n" );
+                              
+        try {
+            
+            
+            
+            
+            while(rta.next())
+            {
+                respuesta.write(" <form role=\"form\" action=\"ServletEliminaOrden.htm\" method=\"get\">");
+                respuesta.write( "                </tr>\r\n" );
+                respuesta.write( "              </thead>\r\n" );
+                respuesta.write( "              <tbody>\r\n" );
+                respuesta.write( "                <tr>\r\n" );
+                respuesta.write("<input type=\"hidden\" value=\""+rta.getString("ID")+"\" name=\"id\"/>");
+                respuesta.write( "                  <td>"+rta.getString("EMAIL_INVER")+"</td>\r\n" );
+                respuesta.write( "                  <td>"+rta.getString("EMAIL_INTER")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("TIPO_OPERACION")+"</td>\r\n" );
+                respuesta.write( "                  <td>"+rta.getString("NIT_VALOR")+"</td>\r\n" );
+                respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
+                respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
+                 respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
+                   respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
+                      respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Eliminar</button>   </td>\r\n" );
+                respuesta.write( "                </tr>\r\n" );
+                respuesta.write("</form>");
+            }
+        } catch (SQLException ex) {
+            respuesta.write( "                  <td> quedo mal </td>\r\n" );
+        }
                     respuesta.write( "              </tbody>\r\n" );
                     respuesta.write( "            </table>\r\n" );
                     respuesta.write( "          </div>\r\n" );
@@ -340,7 +362,7 @@ public class ServletCancelarOrdenOperacionBursatil extends  HttpServlet{
                     respuesta.write( "  \r\n" );
                     respuesta.write( "<div id=\"global-zeroclipboard-html-bridge\" class=\"global-zeroclipboard-container\" style=\"position: absolute; left: 0px; top: -9999px; width: 15px; height: 15px; z-index: 999999999;\" title=\"\" data-original-title=\"Copy to clipboard\">      <object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" id=\"global-zeroclipboard-flash-bridge\" width=\"100%\" height=\"100%\">         <param name=\"movie\" value=\"/assets/flash/ZeroClipboard.swf?noCache=1410465793904\">         <param name=\"allowScriptAccess\" value=\"sameDomain\">         <param name=\"scale\" value=\"exactfit\">         <param name=\"loop\" value=\"false\">         <param name=\"menu\" value=\"false\">         <param name=\"quality\" value=\"best\">         <param name=\"bgcolor\" value=\"#ffffff\">         <param name=\"wmode\" value=\"transparent\">         <param name=\"flashvars\" value=\"trustedOrigins=getbootstrap.com%2C%2F%2Fgetbootstrap.com%2Chttp%3A%2F%2Fgetbootstrap.com\">         <embed src=\"/assets/flash/ZeroClipboard.swf?noCache=1410465793904\" loop=\"false\" menu=\"false\" quality=\"best\" bgcolor=\"#ffffff\" width=\"100%\" height=\"100%\" name=\"global-zeroclipboard-flash-bridge\" allowscriptaccess=\"sameDomain\" allowfullscreen=\"false\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" flashvars=\"trustedOrigins=getbootstrap.com%2C%2F%2Fgetbootstrap.com%2Chttp%3A%2F%2Fgetbootstrap.com\" scale=\"exactfit\">                </object></div></body></html>\r\n" );
 
-        
+                   
     }
     
     
