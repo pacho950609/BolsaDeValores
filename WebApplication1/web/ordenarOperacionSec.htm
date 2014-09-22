@@ -93,10 +93,10 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Ordenar operación secundaria</h1>
-<form role="form" action="ServletOrdenarOperacionBursatil.htm" method="post">
+<form role="form" action="ServletOrdenarOperacionBursatil.htm" method="get">
   <div class="form-group">
     <label for="ejemplo_email_1">Email inversionista</label>
-    <input type="email" class="form-control" id="emailOferente" name="emailOferente"
+    <input type="email" class="form-control" id="emailOferente" name="emailInversionista"
            placeholder="Introduce el email">
   </div>
   <div class="form-group">
@@ -109,8 +109,8 @@
     <label for="ejemplo_email_1">Tipo de operacion</label>
     <select class="form-control" name="tipoOperacion" >
            <option value="" disabled selected>Seleccione el tipo de operacion</option>
-          <option value="Compra" >Compra</option>
-          <option value="Venta">Venta</option>
+          <option value="COMPRA" >Compra</option>
+          <option value="VENTA">Venta</option>
          
         </select>
   </div>   
