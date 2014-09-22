@@ -160,18 +160,18 @@ respuesta.write( "          </ul>\r\n" );
                     
                     respuesta.write( "          </div>\r\n" );
                     respuesta.write( "          <h2 class=\"sub-header\">Ordenes de operaciones bursatiles primarias</h2>\r\n" );
-                    respuesta.write( "          <div class=\"table-responsive\">\r\n" );
-                    respuesta.write( "            <table class=\"table table-striped\">\r\n" );
-                    respuesta.write( "              <thead>\r\n" );
-                    respuesta.write( "                <tr>\r\n" );
-                    respuesta.write( "                  <th>Email Oferente</th>\r\n" );
-                    respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
-                    respuesta.write( "                  <th>Valor</th>\r\n" );
-                    respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
-                    respuesta.write( "                  <th>Cantidad</th>\r\n" );
-                    respuesta.write( "                  <th>Fecha</th>\r\n" );
-                    respuesta.write( "                  <th>Eliminar</th>\r\n" );
+                        respuesta.write( "          <div class=\"table-responsive\">\r\n" );
+                        respuesta.write( "            <table class=\"table table-striped\">\r\n" );
+                        respuesta.write( "              <thead>\r\n" );
+                        respuesta.write( "                <tr>\r\n" );
+                        respuesta.write( "                  <th>Email Oferente</th>\r\n" );
+                        respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
+                        respuesta.write( "                  <th>Nit</th>\r\n" );
+                        respuesta.write( "                  <th>Valor</th>\r\n" );
+                        respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
+                        respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                        respuesta.write( "                  <th>Fecha</th>\r\n" );
+                        respuesta.write( "                  <th>Eliminar</th>\r\n" );
                               
         try {
             while(rta.next())
