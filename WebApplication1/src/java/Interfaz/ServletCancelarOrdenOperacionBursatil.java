@@ -58,7 +58,7 @@ public class ServletCancelarOrdenOperacionBursatil extends  HttpServlet{
                         }
                         else if(tipo.equals("secundario"))
                         {
-                            String sentancia="select * from OPERACIONES_EN_ESPERA_SEC where email_inver='"+email+"'";
+                            String sentancia="select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC where email_inver='"+email+"'";
                             ResultSet rta = x.consultar(sentancia);
                             enviarhtmlSecundario(respuesta, rta);
                         }
@@ -170,6 +170,7 @@ respuesta.write( "          </ul>\r\n" );
                         respuesta.write( "                  <th>Valor</th>\r\n" );
                         respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                         respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                        
                         respuesta.write( "                  <th>Fecha</th>\r\n" );
                         respuesta.write( "                  <th>Eliminar</th>\r\n" );
                               
@@ -188,6 +189,7 @@ respuesta.write( "          </ul>\r\n" );
                 respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
                 respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                  respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
+                    
                    respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
                       respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Eliminar</button>   </td>\r\n" );
                 respuesta.write( "                </tr>\r\n" );
@@ -304,7 +306,7 @@ respuesta.write( "          </ul>\r\n" );
                     respuesta.write( "          <div class=\"row placeholders\">\r\n" );
                     
                     respuesta.write( "          </div>\r\n" );
-                    respuesta.write( "          <h2 class=\"sub-header\">Ordenes de operaciones bursatiles primarias</h2>\r\n" );
+                    respuesta.write( "          <h2 class=\"sub-header\">Ordenes de operaciones bursatiles Secundarias</h2>\r\n" );
                     respuesta.write( "          <div class=\"table-responsive\">\r\n" );
                     respuesta.write( "            <table class=\"table table-striped\">\r\n" );
                     respuesta.write( "              <thead>\r\n" );
@@ -316,6 +318,7 @@ respuesta.write( "          </ul>\r\n" );
                     respuesta.write( "                  <th>Valor</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                           respuesta.write( "                  <th>Precio de Compra</th>\r\n" );
                     respuesta.write( "                  <th>Fecha</th>\r\n" );
                     respuesta.write( "                  <th>Eliminar</th>\r\n" );
                               
@@ -337,8 +340,9 @@ respuesta.write( "          </ul>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("TIPO_OPERACION")+"</td>\r\n" );
                 respuesta.write( "                  <td>"+rta.getString("NIT_VALOR")+"</td>\r\n" );
                 respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
-                respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
-                 respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
+                respuesta.write( "                  <td>"+rta.getString("NVL(PRECIO_UNIDAD,0)")+"</td>\r\n" );
+                 respuesta.write( "                  <td>"+rta.getString("NVL(CANTIDAD,0)")+"</td>\r\n" );
+                   respuesta.write( "                  <td>"+rta.getString("NVL(PRECIO,0)")+"</td>\r\n" );
                    respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
                       respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Eliminar</button>   </td>\r\n" );
                 respuesta.write( "                </tr>\r\n" );
