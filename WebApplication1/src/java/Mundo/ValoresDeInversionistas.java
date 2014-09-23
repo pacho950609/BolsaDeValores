@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class ValoresDeInversionistas 
 {
     private String email;
-     private int nitValor;
+     private String nitValor;
     private String nomValor;
     private int cantidad;
    
@@ -57,7 +57,7 @@ public class ValoresDeInversionistas
         return "ValoresDeInversionistas{" + "email=" + email + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", cantidad=" + cantidad + '}';
     }
 
-    public ValoresDeInversionistas(int id, String email, int nitValor, String nomValor, int cantidad) {
+    public ValoresDeInversionistas( String email, String nitValor, String nomValor, int cantidad) {
         
         this.email = email;
         this.nitValor = nitValor;
@@ -92,7 +92,7 @@ public class ValoresDeInversionistas
         return email;
     }
 
-    public int getNitValor() {
+    public String getNitValor() {
         return nitValor;
     }
 
