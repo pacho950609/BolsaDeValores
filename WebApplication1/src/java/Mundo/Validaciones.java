@@ -5,6 +5,12 @@
  */
 package Mundo;
 
+import Conexion.conexionDB;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author GLORIA AZUCENA
@@ -84,7 +90,28 @@ public class Validaciones {
     
     
     
-    
+    public static boolean validarTieneParaVender(String email , String tipoValor , String cantidad ,String nit,conexionDB x)
+    {
+         
+         String sentencia="Select *  from valores_de_inversionistas , inversionista where inversionista.email=valores_de_inversionistas.email and  nom_valor='"+tipoValor+"'  and cantidad>="+cantidad+"  and valores_de_inversionistas.email='"+email+"' and nit_valor="+nit;
+        ResultSet rta = x.consultar(sentencia);
+        
+        try {
+            if(rta.next())
+            {
+               
+                return true ;
+            }
+            else{
+                return false ;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Validaciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false ;
+        
+    }
     
     
     
