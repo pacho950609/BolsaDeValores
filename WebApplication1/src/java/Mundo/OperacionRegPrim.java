@@ -22,11 +22,11 @@ public class OperacionRegPrim
       private int id;
     private String emailOferente;
     private String emailIntermediario;
-    private int nitValor;
+    private long nitValor;
     private String nomValor;
     private double precioUnidad;
     private int cantidad;
-    private Date fecha;
+    private String fecha;
 
     public OperacionRegPrim(int idp) 
     {
@@ -40,11 +40,11 @@ public class OperacionRegPrim
                 id=idp;
                 emailOferente=r.getString("EMAIL_OFER");
                 emailIntermediario=r.getString("EMAIL_INTER");
-                nitValor=Integer.parseInt(r.getString("NIT_VALOR"));
+                nitValor=Long.parseLong(r.getString("NIT_VALOR"));
                 nomValor=r.getString("NOM_VALOR");
                 precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
                 cantidad=Integer.parseInt(r.getString("CANTIDAD"));
-                fecha= Date.valueOf(r.getString("FECHA"));
+                fecha= r.getString("FECHA");
                
             
             }
@@ -63,7 +63,7 @@ public class OperacionRegPrim
         return "OperacionRegPrim{" + "id=" + id + ", emailOferente=" + emailOferente + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
     }
 
-    public OperacionRegPrim(int id, String emailOferente, String emailIntermediario, int nitValor, String nomValor, double precioUnidad, int cantidad, Date fecha) {
+    public OperacionRegPrim(int id, String emailOferente, String emailIntermediario, long nitValor, String nomValor, double precioUnidad, int cantidad, String fecha) {
         this.id = id;
         this.emailOferente = emailOferente;
         this.emailIntermediario = emailIntermediario;
@@ -110,7 +110,7 @@ public class OperacionRegPrim
         return emailIntermediario;
     }
 
-    public int getNitValor() {
+    public long getNitValor() {
         return nitValor;
     }
 
@@ -126,7 +126,7 @@ public class OperacionRegPrim
         return cantidad;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
     

@@ -27,6 +27,7 @@ public class OperacionEsperaPrim
     private double precioUnidad;
     private int cantidad;
     private String fecha;
+     private Integer solicitud;
 
     public OperacionEsperaPrim(int idp) throws Exception 
     {
@@ -45,7 +46,12 @@ public class OperacionEsperaPrim
                 precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
                 cantidad=Integer.parseInt(r.getString("CANTIDAD"));
                 fecha= r.getString("FECHA");
-               
+                try {
+                    solicitud=Integer.parseInt(r.getString("SOLICITUD"));
+                } catch (Exception e) {
+                    solicitud= null;solicitud=Integer.parseInt(r.getString("SOLICITUD"));
+                }
+
             
             }
             else 
@@ -56,6 +62,15 @@ public class OperacionEsperaPrim
             Logger.getLogger(OperacionEsperaPrim.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    public void setSolicitud(Integer solicitud) {
+        this.solicitud = solicitud;
+        String sentencia = "UPDATE OPERACION_ESPERA_PRIM SET SOLICITUD="+solicitud +" WHERE ID="+id;
+    }
+
+    public Integer getSolicitud() {
+        return solicitud;
     }
 
     @Override

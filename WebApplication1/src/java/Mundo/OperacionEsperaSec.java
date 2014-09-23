@@ -9,9 +9,7 @@ package Mundo;
 import Conexion.conexionDB;
 import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -22,7 +20,7 @@ public class OperacionEsperaSec
      private int id;
     private String emailInversionista;
     private String emailIntermediario;
-    private int nitValor;
+    private long nitValor;
     private String nomValor;
     private String tipoOperacion;
 
@@ -32,10 +30,10 @@ public class OperacionEsperaSec
     }
     private double precioUnidad;
     private int cantidad;
-    private Date fecha;
+    private String fecha;
      private double precio;
 
-    public OperacionEsperaSec(int idp) 
+    public OperacionEsperaSec(int idp) throws Exception 
     {
         conexionDB x = new conexionDB();
         String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_SEC WHERE ID="+idp;
@@ -45,30 +43,30 @@ public class OperacionEsperaSec
             if(r.next())
             {
                 id=idp;
-                emailInversionista=r.getString("EMAIL_INVERSIONISTA");
-                emailIntermediario=r.getString("EMAIL_INTERMEDIARIO");
-                nitValor=Integer.parseInt(r.getString("NIT_VALOR"));
+                emailInversionista=r.getString("EMAIL_INVER");
+                emailIntermediario=r.getString("EMAIL_INTER");
+                nitValor=Long.parseLong(r.getString("NIT_VALOR"));
                 nomValor=r.getString("NOM_VALOR");
                 precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
                 cantidad=Integer.parseInt(r.getString("CANTIDAD"));
-                fecha= Date.valueOf(r.getString("FECHA"));
+                fecha= r.getString("FECHA");
                precio=Double.parseDouble(r.getString("PRECIO"));
                tipoOperacion= r.getString("TIPO_OPERACION");
             
             }
             else 
             {
-                
+                 throw new Exception("Se totea:"+ consulta);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(OperacionEsperaPrim.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+           throw ex;
         }
         
     }
 
     public OperacionEsperaSec(int id, String emailIntermediario, 
             String emailInversionista, int nitValor, String nomValor, 
-            double precioUnidad, int cantidad, Date fecha, String tipoOperacion, Double precio) {
+            double precioUnidad, int cantidad, String fecha, String tipoOperacion, Double precio) {
         this.id = id;
         this.emailInversionista = emailInversionista;
         this.emailIntermediario = emailIntermediario;
@@ -121,7 +119,7 @@ public class OperacionEsperaSec
         return emailIntermediario;
     }
 
-    public int getNitValor() {
+    public long getNitValor() {
         return nitValor;
     }
 
@@ -137,7 +135,7 @@ public class OperacionEsperaSec
         return cantidad;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
     public double getPrecio() {

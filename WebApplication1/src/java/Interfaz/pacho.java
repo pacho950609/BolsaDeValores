@@ -1,6 +1,8 @@
 package Interfaz;
 import Conexion.conexionDB;
 import Mundo.OperacionEsperaPrim;
+import Mundo.OperacionEsperaSec;
+import Mundo.OperacionRegPrim;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -49,7 +51,7 @@ public class pacho extends  HttpServlet{
                         respuesta.write( "<html>\r\n" );
                         
                     try {
-                          OperacionEsperaPrim x = new OperacionEsperaPrim(90);
+                          OperacionRegPrim x = new OperacionRegPrim(90);
                         respuesta.write("Bien"+ x.toString());
                        
                     } catch (Exception ex) {
