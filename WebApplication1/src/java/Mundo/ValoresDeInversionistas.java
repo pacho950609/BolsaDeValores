@@ -52,6 +52,11 @@ public class ValoresDeInversionistas
         
     }
 
+    @Override
+    public String toString() {
+        return "ValoresDeInversionistas{" + "email=" + email + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", cantidad=" + cantidad + '}';
+    }
+
     public ValoresDeInversionistas(int id, String email, int nitValor, String nomValor, int cantidad) {
         
         this.email = email;

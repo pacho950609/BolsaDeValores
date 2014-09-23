@@ -58,6 +58,11 @@ public class OperacionRegPrim
         
     }
 
+    @Override
+    public String toString() {
+        return "OperacionRegPrim{" + "id=" + id + ", emailOferente=" + emailOferente + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
+    }
+
     public OperacionRegPrim(int id, String emailOferente, String emailIntermediario, int nitValor, String nomValor, double precioUnidad, int cantidad, Date fecha) {
         this.id = id;
         this.emailOferente = emailOferente;

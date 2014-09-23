@@ -28,7 +28,7 @@ public class OperacionEsperaPrim
     private int cantidad;
     private Date fecha;
 
-    public OperacionEsperaPrim(int idp) 
+    public OperacionEsperaPrim(int idp) throws Exception 
     {
         conexionDB x = new conexionDB();
         String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_PRIM WHERE ID="+idp;
@@ -50,12 +50,17 @@ public class OperacionEsperaPrim
             }
             else 
             {
-                
+                throw new Exception("Se totea:"+consulta);
             }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionEsperaPrim.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    @Override
+    public String toString() {
+        return "OperacionEsperaPrim{" + "id=" + id + ", emailOferente=" + emailOferente + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
     }
 
     public OperacionEsperaPrim(int id, String emailOferente, String emailIntermediario, int nitValor, String nomValor, double precioUnidad, int cantidad, Date fecha) {

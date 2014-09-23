@@ -1,5 +1,6 @@
 package Interfaz;
 import Conexion.conexionDB;
+import Mundo.OperacionEsperaPrim;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -44,20 +45,18 @@ public class pacho extends  HttpServlet{
 	     */
 	    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
-                
-                  
-                       
-                         String id = request.getParameter( "id" );
-                        
-                        // Maneja el GET y el POST de la misma manera
-                        PrintWriter respuesta = response.getWriter() ;
+                           PrintWriter respuesta = response.getWriter() ;
                         respuesta.write( "<html>\r\n" );
-                       
-                            
-                            respuesta.write(id );
                         
-                        respuesta.write( "</html>\r\n" );
-                    
+                    try {
+                          
+                        respuesta.write("Bien"+(new OperacionEsperaPrim(98)).toString());
+                       
+                    } catch (Exception ex) {
+                         
+                         respuesta.write("Mal"+ex.getMessage());
+                    }
+                     respuesta.write( "</html>\r\n" );
 	    	
 	    }
 		

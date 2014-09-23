@@ -25,6 +25,11 @@ public class OperacionEsperaSec
     private int nitValor;
     private String nomValor;
     private String tipoOperacion;
+
+    @Override
+    public String toString() {
+        return "OperacionEsperaSec{" + "id=" + id + ", emailInversionista=" + emailInversionista + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", tipoOperacion=" + tipoOperacion + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + ", precio=" + precio + '}';
+    }
     private double precioUnidad;
     private int cantidad;
     private Date fecha;
