@@ -59,6 +59,11 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-class>Interfaz.ServletRegistrarOrden</servlet-class>
  </servlet>
  
+  <servlet>
+  <servlet-name>ServletConsultarExistenciaValor</servlet-name>
+  <servlet-class>Interfaz.ServletConsultarExistenciaValor</servlet-class>
+ </servlet>
+ 
  
  <!-- MAPPING -->
  
@@ -101,6 +106,12 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-name>ServletRegistrarOrden</servlet-name>
   <url-pattern>/ServletRegistrarOrden.htm</url-pattern>
  </servlet-mapping>
+ 
+  <servlet-mapping>
+  <servlet-name>ServletConsultarExistenciaValor</servlet-name>
+  <url-pattern>/ServletConsultarExistenciaValor.htm</url-pattern>
+ </servlet-mapping>
+ 
 	
    
 </web-app>
