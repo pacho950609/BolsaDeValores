@@ -19,6 +19,46 @@ import java.util.logging.Logger;
 public class SolicitudCompra
 {
     private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public long getNitValor() {
+        return nitValor;
+    }
+
+    public String getNomValor() {
+        return nomValor;
+    }
+
+    public double getPrecioUnidad() {
+        return precioUnidad;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String getEmailVen() {
+        return emailVen;
+    }
+
+    public String getEmailComp() {
+        return emailComp;
+    }
+
+    public String getEmailIntVen() {
+        return emailIntVen;
+    }
+
+    public String getEmailIntCom() {
+        return emailIntCom;
+    }
     private long nitValor;
     private String nomValor;
     private double precioUnidad;
