@@ -54,6 +54,11 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-class>Interfaz.ServletEliminaOrden</servlet-class>
  </servlet>
  
+ <servlet>
+  <servlet-name>ServletRegistrarOrden</servlet-name>
+  <servlet-class>Interfaz.ServletRegistrarOrden</servlet-class>
+ </servlet>
+ 
  
  <!-- MAPPING -->
  
@@ -90,6 +95,11 @@ Autor: Pablo Barvo - 08-Feb-2006
  <servlet-mapping>
   <servlet-name>ServletEliminaOrden</servlet-name>
   <url-pattern>/ServletEliminaOrden.htm</url-pattern>
+ </servlet-mapping>
+ 
+ <servlet-mapping>
+  <servlet-name>ServletRegistrarOrden</servlet-name>
+  <url-pattern>/ServletRegistrarOrden.htm</url-pattern>
  </servlet-mapping>
 	
    

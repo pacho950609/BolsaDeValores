@@ -49,16 +49,17 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                      
                          PrintWriter respuesta = response.getWriter() ;
                        
-                        if(tipoOperacion=="primario")
+                        if(tipoOperacion.equals("primario"))
                         {                    
                              // Maneja el GET y el POST de la misma manera
                             
                             ResultSet rta= x.consultar("SELECT * FROM OPERACIONES_EN_ESPERA_PRIM "
                                     + "WHERE EMAIL_INTERMEDIARIO ='"+email+"'");      
                         
-                            respuesta.write(tipoOperacion);
+                            //respuesta.write(tipoOperacion);
+                             imprimirHeader(rta,respuesta);
                             registrarOperacionPrimaria(rta, respuesta);
-                             
+                              imprimirFooter(rta, respuesta);
                                    
                                 
                             
@@ -79,7 +80,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
 
     private void registrarOperacionPrimaria(ResultSet rta,PrintWriter respuesta)
     {
-        imprimirHeader(rta,respuesta);
+       
         
          respuesta.write( "          <div class=\"table-responsive\">\r\n" );
                     respuesta.write( "            <table class=\"table table-striped\">\r\n" );
@@ -97,7 +98,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
           try {
               while(rta.next())
               {
-                  respuesta.write(" <form role=\"form\" action=\"ServletEliminaOrden.htm\" method=\"post\">");
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"post\">");
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write( "              </thead>\r\n" );
                   respuesta.write( "              <tbody>\r\n" );
@@ -110,11 +111,17 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                   respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
-                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Eliminar</button>   </td>\r\n" );
+                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Registrar</button>   </td>\r\n" );
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write("</form>");
               }
-              imprimirFooter(rta, respuesta);
+              respuesta.write( "              </tbody>\r\n" );
+                    respuesta.write( "            </table>\r\n" );
+                    respuesta.write( "          </div>\r\n" );
+                    respuesta.write( "        </div>\r\n" );
+                    respuesta.write( "      </div>\r\n" );
+                    respuesta.write( "    </div>\r\n" );
+             
           } catch (SQLException ex) {
               Logger.getLogger(ServletRegistrarOperacionBursatil.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -206,12 +213,7 @@ respuesta.write( "          <h1 class=\"page-header\">Registrar operaciÃ³n pri
     }
 
     private void imprimirFooter(ResultSet rta, PrintWriter respuesta) {
-       respuesta.write( "              </tbody>\r\n" );
-                    respuesta.write( "            </table>\r\n" );
-                    respuesta.write( "          </div>\r\n" );
-                    respuesta.write( "        </div>\r\n" );
-                    respuesta.write( "      </div>\r\n" );
-                    respuesta.write( "    </div>\r\n" );
+       
                     respuesta.write( "    <!-- Bootstrap core JavaScript\r\n" );
                     respuesta.write( "    ================================================== -->\r\n" );
                     respuesta.write( "    <!-- Placed at the end of the document so the pages load faster -->\r\n" );
