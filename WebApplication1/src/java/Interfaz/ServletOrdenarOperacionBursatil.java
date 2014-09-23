@@ -38,6 +38,7 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                                 String nit = request.getParameter( "nit" );
                                 String precio = request.getParameter( "precio" );
                                 String precioCompra = request.getParameter( "precioCompra" );
+                                String seranull=null;
                                
                                 String cantidad = request.getParameter( "cantidad" );
                                   conexionDB x = new conexionDB();
@@ -46,7 +47,7 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                             try{
                                
                                 
-                            if((tipoOperacion.equals("VENTA")&& Validaciones.validarTieneParaVender(emailInversionista, nombreValor, cantidad, nit, x))||tipoOperacion.equals("COMPRA"))
+                            if(tipoOperacion.equalsIgnoreCase("COMPRA")||(tipoOperacion.equals("VENTA")&& Validaciones.validarTieneParaVender(emailInversionista, nombreValor, cantidad, nit, x)))
                             {
                                 
                             //conexion base de datos
@@ -67,7 +68,7 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                                     +"',"+precio
                                     +","+cantidad
                                     +",(SELECT SYSDATE FROM DUAL)"
-                                    +",'"+emailIntermediario+"',"+precioCompra+")";
+                                    +",'"+emailIntermediario+"',"+precioCompra+","+seranull+")";
                              boolean rta = x.actualizarCrear(sqlS);
                         
                            
@@ -868,7 +869,8 @@ respuesta.write( "<div id=\"global-zeroclipboard-html-bridge\" class=\"global-ze
                             String nombreValor = request.getParameter( "tipoValor" );
                             String nit = request.getParameter( "nit" );
                              String precio = request.getParameter( "precio" );
-                            int cantidad = Integer.parseInt(request.getParameter( "cantidad" ));
+                            String cantidad = request.getParameter( "cantidad" );
+                            String seranull=null;
                           
                             //realiza las validaciones correspondientes
                         
@@ -882,7 +884,7 @@ respuesta.write( "<div id=\"global-zeroclipboard-html-bridge\" class=\"global-ze
                               
                             }
                             String sqlS="INSERT INTO OPERACIONES_EN_ESPERA_PRIM VALUES("
-                             +nuevoid +",'"+emailOferente + "','"+emailIntermediario+"'," +nit+",'"+nombreValor+"',"+precio+","+cantidad+",(SELECT SYSDATE FROM DUAL))";
+                             +nuevoid +",'"+emailOferente + "','"+emailIntermediario+"'," +nit+",'"+nombreValor+"',"+precio+","+cantidad+",(SELECT SYSDATE FROM DUAL),"+seranull+")";
                              boolean rta = x.actualizarCrear(sqlS);
                         
                            

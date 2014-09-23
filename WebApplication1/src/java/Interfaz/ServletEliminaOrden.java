@@ -8,6 +8,11 @@ package Interfaz;
 import Conexion.conexionDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.model.ResultSetDataModel;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,19 +35,37 @@ public class ServletEliminaOrden extends  HttpServlet{
                        
                          String id = request.getParameter( "id" );
                          String sentancia="DELETE FROM OPERACIONES_EN_ESPERA_SEC WHERE ID='"+id+"'";
+                          String sentanciaMirar="select * from OPERACIONES_EN_ESPERA_SEC  where SOLICITUD IS NULL AND  id ='"+id+"'";
                          PrintWriter respuesta = response.getWriter() ;
                          conexionDB x = new conexionDB();
+                         ResultSet sepuedeEliminar= x.consultar(sentanciaMirar);
                          
-                        boolean rta= x.actualizarCrear(sentancia);
-                         if(rta)
-                         {
-                             String mensaje="Se ha borrado exitosamente la orden";
-                             imprimirhtmlprimario(respuesta, mensaje);
-                         }
-                         else{
-                              String mensaje="no se ha podido borrar la orden";
-                              imprimirhtmlprimario(respuesta, mensaje);
-                         }
+                    try {
+                        if(sepuedeEliminar.next())
+                        {
+                            
+                            boolean rta= x.actualizarCrear(sentancia);
+                            if(rta)
+                            {
+                                String mensaje="Se ha borrado exitosamente la orden";
+                                imprimirhtmlprimario(respuesta, mensaje);
+                            }
+                            else
+                            {
+                            String mensaje="no se ha podido borrar la orden";
+                            imprimirhtmlprimario(respuesta, mensaje);
+                            }
+                        }
+                        else{
+                            String mensaje="no se ha podido borrar la orden ya que se ha generado una solicitud con ella";
+                            imprimirhtmlprimario(respuesta, mensaje);
+                        }
+                        
+                        
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ServletEliminaOrden.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
 	    	
 	        
@@ -59,19 +82,36 @@ public class ServletEliminaOrden extends  HttpServlet{
                        
                          String id = request.getParameter( "id" );
                          String sentancia="DELETE FROM OPERACIONES_EN_ESPERA_PRIM WHERE ID='"+id+"'";
+                         String sentanciaMirar="select * from OPERACIONES_EN_ESPERA_PRIM  where SOLICITUD IS NULL AND  id ='"+id+"'";
                          PrintWriter respuesta = response.getWriter() ;
                          conexionDB x = new conexionDB();
+                          ResultSet sepuedeEliminar= x.consultar(sentanciaMirar);
                          
-                        boolean rta= x.actualizarCrear(sentancia);
-                         if(rta)
-                         {
-                             String mensaje="Se ha borrado exitosamente la orden";
-                             imprimirhtmlprimario(respuesta, mensaje);
-                         }
-                         else{
-                              String mensaje="no se ha podido borrar la orden";
-                              imprimirhtmlprimario(respuesta, mensaje);
-                         }
+                          
+                    try {
+                        if(sepuedeEliminar.next())
+                        {
+                            
+                            boolean rta= x.actualizarCrear(sentancia);
+                            if(rta)
+                            {
+                                String mensaje="Se ha borrado exitosamente la orden";
+                                imprimirhtmlprimario(respuesta, mensaje);
+                            }
+                             else{
+                            String mensaje="no se ha podido borrar la orden";
+                            imprimirhtmlprimario(respuesta, mensaje);
+                        }
+                            
+                            
+                        }
+                        else{
+                            String mensaje="no se ha podido borrar la orden ya que se ha generado una solicitud con ella";
+                            imprimirhtmlprimario(respuesta, mensaje);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ServletEliminaOrden.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
 	    	
 	    }

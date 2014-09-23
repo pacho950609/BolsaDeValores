@@ -52,13 +52,13 @@ public class ServletCancelarOrdenOperacionBursatil extends  HttpServlet{
                        
                         if(tipo.equals("primario"))
                         {
-                             String sentancia="select * from OPERACIONES_EN_ESPERA_PRIM where email_oferente='"+email+"'";
+                             String sentancia="select * from OPERACIONES_EN_ESPERA_PRIM where email_oferente='"+email+"' and SOLICITUD is null";
                              ResultSet rta = x.consultar(sentancia);
                                enviarhtmlPrimario(respuesta, rta);
                         }
                         else if(tipo.equals("secundario"))
                         {
-                            String sentancia="select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC where email_inver='"+email+"'";
+                            String sentancia="select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC where email_inver='"+email+"' and SOLICITUD is null";
                             ResultSet rta = x.consultar(sentancia);
                             enviarhtmlSecundario(respuesta, rta);
                         }
