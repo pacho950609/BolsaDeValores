@@ -49,8 +49,8 @@ public class pacho extends  HttpServlet{
                         respuesta.write( "<html>\r\n" );
                         
                     try {
-                          
-                        respuesta.write("Bien"+(new OperacionEsperaPrim(98)).toString());
+                          OperacionEsperaPrim x = new OperacionEsperaPrim(90);
+                        respuesta.write("Bien"+ x.toString());
                        
                     } catch (Exception ex) {
                          
