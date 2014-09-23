@@ -142,7 +142,7 @@ public class ServletCancelarOrdenOperacionBursatil extends  HttpServlet{
                     respuesta.write( "          <ul class=\"nav nav-sidebar\">\r\n" );
                    respuesta.write( "              <li ><a href=\"./ordenarOperacionPrim.htm\">Ordenar operación primaria</a></li>\r\n" );
 respuesta.write( "            <li><a href=\"./ordenarOperacionSec.htm\">Ordenar operación secundaria</a></li>\r\n" );
-respuesta.write( "            <li class=\"active\"><a href=\"./cancelarOperacion.htm\">Cancelar operación bursátil</a></li>\r\n" );
+respuesta.write( "            <li class=\"active\"><a href=\"./cancelarOperacion.htm\">Cancelar operacion bursatil</a></li>\r\n" );
 respuesta.write( "            <li><a href=\"./registrarOperacion.htm\">Registrar operación </a></li>\r\n" );
 respuesta.write( "          \r\n" );
 respuesta.write( "          </ul>\r\n" );
@@ -155,7 +155,7 @@ respuesta.write( "          </ul>\r\n" );
                     respuesta.write( "          \r\n" );
                     respuesta.write( "        </div>\r\n" );
                     respuesta.write( "        <div class=\"col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main\">\r\n" );
-                    respuesta.write( "          <h1 class=\"page-header\">Cancelar operación bursátil</h1>\r\n" );
+                    respuesta.write( "          <h1 class=\"page-header\">Cancelar operacion bursatil</h1>\r\n" );
                     respuesta.write( "          <div class=\"row placeholders\">\r\n" );
                     
                     respuesta.write( "          </div>\r\n" );

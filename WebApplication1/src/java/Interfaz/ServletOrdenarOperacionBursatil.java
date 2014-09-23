@@ -40,7 +40,10 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                                 String nombreValor = request.getParameter( "tipoValor" );
                                 String nit = request.getParameter( "nit" );
                                 String precio = request.getParameter( "precio" );
-                                int cantidad = Integer.parseInt(request.getParameter( "cantidad" ));
+                                String precioCompra = request.getParameter( "precioCompra" );
+                               
+                                String cantidad = request.getParameter( "cantidad" );
+                                
                             
                             //conexion base de datos
                              conexionDB x = new conexionDB();
@@ -60,7 +63,7 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                                     +"',"+precio
                                     +","+cantidad
                                     +",(SELECT SYSDATE FROM DUAL)"
-                                    +",'"+emailIntermediario+"')";
+                                    +",'"+emailIntermediario+"',"+precioCompra+")";
                              boolean rta = x.actualizarCrear(sqlS);
                         
                            
