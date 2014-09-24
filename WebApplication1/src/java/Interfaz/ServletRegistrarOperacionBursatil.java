@@ -22,87 +22,65 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author GLORIA AZUCENA
+ * @author CRISTIAN
  */
 public class ServletRegistrarOperacionBursatil extends  HttpServlet{
     
     public static String ACEPTAR_SOLICITUD_PRIM="ACEPTARSOLICITUDPRIM";
     public static String ACEPTAR_SOLICITUD_SEC="ACEPTARSOLICITUDSEC";
-    public static String TRANSAR_PRIMARIO="PRIMARIO";
-    public static String TRANSAR_SECUNDARIO="SECUNDARIO";
+    public static String TRANSAR_COMPRA="COMPRA";
       protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
 	    {
-                String operacion = request.getParameter( "operacion" );
-                String id = request.getParameter( "id" );
-                conexionDB x = new conexionDB();
-                PrintWriter respuesta = response.getWriter() ;
-	        if(operacion.equals(ACEPTAR_SOLICITUD_PRIM))
-                {
-                    aceptarSolicitudPrim(id, respuesta, x);
-                }
-                
-                if(operacion.equals(ACEPTAR_SOLICITUD_SEC))
-                {
-                    aceptarSolicitudSec(id, respuesta, x);
-                }
-                
-//                if(operacion.equals(TRANSAR_PRIMARIO))
-//                {
-//                    transarPrim(id, respuesta, x);
-//                }
-//                
-//                if(operacion.equals(TRANSAR_SECUNDARIO))
-//                {
-//                    transarSec(id, respuesta, x);
-//                }
-	
-	        
+//                String operacion = request.getParameter( "operacion" );
+//                String id = request.getParameter( "id" );
+//                conexionDB x = new conexionDB();
+//                PrintWriter respuesta = response.getWriter() ;
+	  
 	    }
-		/**
-	     * Maneja un pedido POST de un cliente
-	     * @param request Pedido del cliente
-	     * @param response Respuesta
-	     */
-	    protected void doPost( HttpServletRequest request, HttpServletResponse response ) 
-	    {
-              
-                try{
-                    
-                      String email = request.getParameter( "email" );
-                 conexionDB x = new conexionDB();
-                    PrintWriter respuesta = response.getWriter() ;
-                if( email!=null)
-                {
-                     ResultSet rtaPrimario= x.consultar("SELECT * FROM OPERACIONES_EN_ESPERA_PRIM "
-                                    + "WHERE EMAIL_INTERMEDIARIO ='"+email+"' AND SOLICITUD IS NULL");  
-                     
-                     ResultSet rtaCompSec= x.consultar("SELECT * FROM OPERACIONES_EN_ESPERA_SEC "
-                                    + "WHERE EMAIL_INTER ='"+email+"' AND SOLICITUD IS NULL AND TIPO_OPERACION = 'COMPRA'");  
-                      iniciarSesion(email, respuesta, rtaPrimario, rtaCompSec, x);
-                      rtaPrimario.close();
-                      rtaCompSec.close();
-                      
-                }
-                          
-                }
-                catch(Exception e)
-                        {
-                          
-                        }
-                
-         }
+		
+    protected void doPost( HttpServletRequest request, HttpServletResponse response )   
+    {
 
-             private void iniciarSesion(String email, PrintWriter respuesta, ResultSet rtaPrimario,  ResultSet rtaCompraSec,  conexionDB x) 
+        try{
+
+              String email = request.getParameter( "email" );
+         conexionDB x = new conexionDB();
+            PrintWriter respuesta = response.getWriter() ;
+        if( email!=null)
+        {
+             ResultSet rtaCompSec= x.consultar("SELECT * FROM OPERACIONES_EN_ESPERA_SEC "
+                            + "WHERE EMAIL_INTER ='"+email+"' AND SOLICITUD IS NULL AND TIPO_OPERACION = 'COMPRA'");  
+              iniciarSesion(email, respuesta, rtaCompSec, x);
+              
+              rtaCompSec.close();
+
+        }
+        x.close();
+        }
+        catch(Exception e)
                 {
+                    e.printStackTrace();
+                }
+
+ }
+
+    private void iniciarSesion(String email, PrintWriter respuesta, ResultSet rtaCompraSec, conexionDB x) 
+    {
           try {
               imprimirHeader(respuesta);
               imprimirComprasSecundario(rtaCompraSec, respuesta);
               imprimirSolicitudesPrim(Consultas.consultarSolicitudesPrimasriasPorIntermediario(x, email), respuesta);
-              imprimirSolicitudesSec(Consultas.consultarSolicitudesSecundarioasPorIntermediario(x, email), respuesta);
+              imprimirSolicitudesSec(email, respuesta);
               imprimirFooter( respuesta);
+              
           } catch (Exception ex) {
-             respuesta.write("popo "+ex.getMessage());
+              try {
+                  respuesta.write("Tamanio= "+Consultas.consultarSolicitudesSecundarioasPorIntermediario(x, email).size()+ex.getMessage());
+              } catch (SQLException ex1) {
+                  respuesta.write(ex1.getMessage());
+              }
           }
+          x.close();
     }
 
     public static void imprimirHeader( PrintWriter respuesta) {
@@ -191,9 +169,10 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                  
                  
     }
-
-     public static void imprimirFooter(PrintWriter respuesta) {
-       
+    public static void imprimirFooter(PrintWriter respuesta) {
+                    respuesta.write( "        </div>\r\n" );
+                    respuesta.write( "      </div>\r\n" );
+                    respuesta.write( "    </div>\r\n" );
                     respuesta.write( "    <!-- Bootstrap core JavaScript\r\n" );
                     respuesta.write( "    ================================================== -->\r\n" );
                     respuesta.write( "    <!-- Placed at the end of the document so the pages load faster -->\r\n" );
@@ -207,54 +186,6 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
 
         
     }
-    
-     private void imprimirPrimario(ResultSet rta,PrintWriter respuesta)    {
-       
-         respuesta.write("                   <h3>Mercado primario</h3>");
-         respuesta.write( "          <div class=\"table-responsive\">\r\n" );
-                    respuesta.write( "            <table class=\"table table-striped\">\r\n" );
-                    respuesta.write( "              <thead>\r\n" );
-                    respuesta.write( "                <tr>\r\n" );
-                    respuesta.write( "                  <th>Email Oferente</th>\r\n" );
-                    respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
-                    respuesta.write( "                  <th>Valor</th>\r\n" );
-                    respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
-                    respuesta.write( "                  <th>Cantidad</th>\r\n" );
-                    respuesta.write( "                  <th>Fecha</th>\r\n" );
-                    respuesta.write( "                  <th>Buscar comprador</th>\r\n" );
-        
-          try {
-              while(rta.next())
-              {
-                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOperacionBursatil.htm\" method=\"get\">");
-                  respuesta.write( "                </tr>\r\n" );
-                  respuesta.write( "              </thead>\r\n" );
-                  respuesta.write( "              <tbody>\r\n" );
-                  respuesta.write( "                <tr>\r\n" );
-                  respuesta.write("<input type=\"hidden\" value=\""+rta.getString("ID")+"\" name=\"id\"/>");
-                  respuesta.write("<input type=\"hidden\" value=\""+TRANSAR_PRIMARIO+"\" name=\"operacion\"/>");
-                  respuesta.write( "                  <td>"+rta.getString("EMAIL_OFERENTE")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("EMAIL_INTERMEDIARIO")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("NIT_VALOR")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
-                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Buscar</button>   </td>\r\n" );
-                  respuesta.write( "                </tr>\r\n" );
-                  respuesta.write("</form>");
-              }
-              respuesta.write( "              </tbody>\r\n" );
-                    respuesta.write( "            </table>\r\n" );
-                    respuesta.write( "          </div>\r\n" );
-                   
-             
-          } catch (SQLException ex) {
-              Logger.getLogger(ServletRegistrarOperacionBursatil.class.getName()).log(Level.SEVERE, null, ex);
-          }
-    }
-
     private void imprimirComprasSecundario(ResultSet rtaCompraSec, PrintWriter respuesta) {
             respuesta.write("                   <h3>Compras mercado secundarios</h3>");
          respuesta.write( "          <div class=\"table-responsive\">\r\n" );
@@ -269,7 +200,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
                     respuesta.write( "                  <th>Fecha</th>\r\n" );
                     respuesta.write( "                  <th>Precio total</th>\r\n" );
-                    respuesta.write( "                  <th>Buscar comprador</th>\r\n" );
+                    respuesta.write( "                  <th>Buscar vendedor</th>\r\n" );
         
           try {
               while(rtaCompraSec.next())
@@ -280,7 +211,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                   respuesta.write( "              <tbody>\r\n" );
                   respuesta.write( "                <tr>\r\n" );
                   respuesta.write("<input type=\"hidden\" value=\""+rtaCompraSec.getString("ID")+"\" name=\"id\"/>");
-                 respuesta.write("<input type=\"hidden\" value=\""+TRANSAR_SECUNDARIO+"\" name=\"operacion\"/>");
+                 respuesta.write("<input type=\"hidden\" value=\""+TRANSAR_COMPRA+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("EMAIL_INVER")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("EMAIL_INTER")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("NIT_VALOR")+"</td>\r\n" );
@@ -303,7 +234,6 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
           }
     
     }
-
     private void imprimirSolicitudesPrim(ArrayList<SolicitudCompra> rtaCompraSec, PrintWriter respuesta) {
     respuesta.write("                   <h3>Solicitudes mercado primario</h3>");
          respuesta.write( "          <div class=\"table-responsive\">\r\n" );
@@ -324,7 +254,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
           
               for(int i =0; i <rtaCompraSec.size();i++)
               {
-                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOperacionBursatil.htm\" method=\"get\">");
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"post\">");
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write( "              </thead>\r\n" );
                   respuesta.write( "              <tbody>\r\n" );
@@ -351,11 +281,12 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
         
     
     
-    }
-		
-    private void imprimirSolicitudesSec(ArrayList<SolicitudCompra> rtaCompraSec, PrintWriter respuesta) {
-
- respuesta.write("                   <h3>Solicitudes mercado secundario</h3>");
+    }	
+    private void imprimirSolicitudesSec(String email, PrintWriter respuesta) {
+        conexionDB x= new conexionDB();
+        ResultSet r= x.consultar("SELECT * FROM SOLICITUDES_COMPRA_SEC WHERE EMAIL_INT_VEN ='"+email+"'");
+        
+        respuesta.write("                   <h3>Solicitudes mercado secundario</h3>");
          respuesta.write( "          <div class=\"table-responsive\">\r\n" );
                     respuesta.write( "            <table class=\"table table-striped\">\r\n" );
                     respuesta.write( "              <thead>\r\n" );
@@ -371,55 +302,43 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                     respuesta.write( "                  <th>Fecha</th>\r\n" );
                     respuesta.write( "                  <th>Aceptar solicitud</th>\r\n" );
         
-          
-              for(int i =0; i <rtaCompraSec.size();i++)
+          try{
+              while(r.next())
               {
-                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOperacionBursatil.htm\" method=\"get\">");
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"post\">");
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write( "              </thead>\r\n" );
                   respuesta.write( "              <tbody>\r\n" );
                   respuesta.write( "                <tr>\r\n" );
-                  respuesta.write("<input type=\"hidden\" value=\""+rtaCompraSec.get(i).getId()+"\" name=\"id\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+r.getString("ID")+"\" name=\"id\"/>");
                   respuesta.write("<input type=\"hidden\" value=\""+ACEPTAR_SOLICITUD_SEC+"\" name=\"operacion\"/>");
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getNomValor()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getNitValor()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getCantidad()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getPrecioUnidad()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getEmailIntCom()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getEmailComp()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getEmailVen()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getEmailIntVen()+"</td>\r\n" );        
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getFecha()+"</td>\r\n" );    
+                  respuesta.write( "                  <td>"+r.getString("NOM_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("CANTIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("PRECIO_UNITARIO")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("EMAIL_INT_COM")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("EMAIL_COM")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("EMAIL_VEN")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+r.getString("EMAIL_INT_VEN")+"</td>\r\n" );        
+                  respuesta.write( "                  <td>"+r.getString("FECHA")+"</td>\r\n" );    
                   respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Aceptar</button>   </td>\r\n" );
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write("</form>");
               }
+          }
+          catch(Exception e)
+          {
+              respuesta.write(e.getMessage());
+          }
               respuesta.write( "              </tbody>\r\n" );
                     respuesta.write( "            </table>\r\n" );
                     respuesta.write( "          </div>\r\n" );
-                    respuesta.write( "        </div>\r\n" );
-                    respuesta.write( "      </div>\r\n" );
-                    respuesta.write( "    </div>\r\n" );
+                  
              
         
     }
 
-    private void aceptarSolicitudPrim(String id, PrintWriter respuesta, conexionDB x) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void aceptarSolicitudSec(String id, PrintWriter respuesta, conexionDB x) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void transarPrim(String id, PrintWriter respuesta, conexionDB x) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void transarSec(String id, PrintWriter respuesta, conexionDB x) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-		
+   
 		
     
 		

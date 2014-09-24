@@ -9,7 +9,6 @@ import Conexion.conexionDB;
 import Mundo.Consultas;
 import Mundo.OperacionEsperaPrim;
 import Mundo.ValoresDeInversionistas;
-import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -108,6 +107,8 @@ public class ServletConsultarExistenciaValor extends HttpServlet{
                                                 Logger.getLogger(ServletConsultarExistenciaValor.class.getName()).log(Level.SEVERE, null, ex);
                                             }
                                   }
+                                    x.close();
+                                    
 	    }
 		/**
 	     * Maneja un pedido POST de un cliente

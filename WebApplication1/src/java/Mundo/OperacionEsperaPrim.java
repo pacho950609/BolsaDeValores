@@ -19,13 +19,17 @@ import java.util.logging.Logger;
  */
 public class OperacionEsperaPrim 
 {
+
+    public static OperacionEsperaPrim obtenerPorIdSolicitud(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     private int id;
     private String emailOferente;
     private String emailIntermediario;
     private long nitValor;
     private String nomValor;
-    private double precioUnidad;
-    private int cantidad;
+    private Double precioUnidad;
+    private Integer cantidad;
     private String fecha;
      private Integer solicitud;
 
@@ -35,7 +39,7 @@ public class OperacionEsperaPrim
         String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_PRIM WHERE ID="+idp;
         ResultSet r= x.consultar(consulta);
         
-        try {
+        
             if(r.next())
             {
                 id=idp;
@@ -43,14 +47,25 @@ public class OperacionEsperaPrim
                 emailIntermediario=r.getString("EMAIL_INTERMEDIARIO");
                 nitValor=Long.parseLong(r.getString("NIT_VALOR"));
                 nomValor=r.getString("NOM_VALOR");
-                precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
-                cantidad=Integer.parseInt(r.getString("CANTIDAD"));
                 fecha= r.getString("FECHA");
                 try {
                     solicitud=Integer.parseInt(r.getString("SOLICITUD"));
                 } catch (Exception e) {
-                    solicitud= null;solicitud=Integer.parseInt(r.getString("SOLICITUD"));
+                    solicitud= null;             
                 }
+                
+                 try {
+                   precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
+                } catch (Exception e) {
+                   precioUnidad=null;     
+                } 
+                 
+                 try {
+                    cantidad=Integer.parseInt(r.getString("CANTIDAD"));
+                } catch (Exception e) {
+                    cantidad= null;             
+                }
+                 
 
             
             }
@@ -58,9 +73,8 @@ public class OperacionEsperaPrim
             {
                 throw new Exception("Se totea:"+consulta);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(OperacionEsperaPrim.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        r.close();
+        x.close();
         
     }
 

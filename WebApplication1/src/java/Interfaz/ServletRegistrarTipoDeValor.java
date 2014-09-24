@@ -72,7 +72,7 @@ public class ServletRegistrarTipoDeValor extends  HttpServlet{
                             }
                         
                         respuesta.write( "</html>\r\n" );
-                        
+                        x.close();
                 }
                 catch(Exception e)
                         {

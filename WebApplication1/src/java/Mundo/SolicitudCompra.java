@@ -83,6 +83,39 @@ public class SolicitudCompra
         this.emailIntVen = emailIntVen;
         this.emailIntCom = emailIntCom;
     }
+    
+    public static SolicitudCompra darsolicitudPrim(int id) throws SQLException
+    {
+        conexionDB x= new conexionDB();
+         ResultSet r =  x.consultar("SELECT * \n" +
+                "FROM SOLICITUD_COMPRA_PRIM \n" +
+                "WHERE \n" +
+                "ID= "+id);
+         SolicitudCompra s= null;
+         
+             s= new SolicitudCompra(Integer.parseInt(r.getString("ID")), Long.parseLong(r.getString("NIT_VALOR")), r.getString("NOM_VALOR"), 
+                     Double.parseDouble(r.getString("PRECIO_UNITARIO")), Integer.parseInt(r.getString("CANTIDAD")), r.getString("FECHA"), 
+                     r.getString("EMAIL_VEN"), r.getString("EMAIL_COM"), r.getString("EMAIL_INT_VEN"), r.getString("EMAIL_INT_COM"));
+    
+        return s;
+    }
+        
+    public static SolicitudCompra darsolicitudSec(int id) throws SQLException
+    {
+        conexionDB x= new conexionDB();
+         ResultSet r =  x.consultar("SELECT * \n" +
+                "FROM SOLICITUD_COMPRA_SEC \n" +
+                "WHERE \n" +
+                "ID= "+id);
+         SolicitudCompra s= null;
+         
+             s= new SolicitudCompra(Integer.parseInt(r.getString("ID")), Long.parseLong(r.getString("NIT_VALOR")), r.getString("NOM_VALOR"), 
+                     Double.parseDouble(r.getString("PRECIO_UNITARIO")), Integer.parseInt(r.getString("CANTIDAD")), r.getString("FECHA"), 
+                     r.getString("EMAIL_VEN"), r.getString("EMAIL_COM"), r.getString("EMAIL_INT_VEN"), r.getString("EMAIL_INT_COM"));
+    
+        return s;
+    }
+        
 
     
    

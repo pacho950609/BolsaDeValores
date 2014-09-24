@@ -60,7 +60,11 @@ public class ServletRegistrarTipoRentabilidad extends  HttpServlet{
                             respuesta.write(rta.getString("NOMBRE")+ "<br>" );
                         }
                         respuesta.write( "</html>\r\n" );
-                    } catch (SQLException ex) {
+                        rta.close();
+                        x.close();
+                    } 
+                    catch (Exception ex) 
+                    {
                         Logger.getLogger(pacho.class.getName()).log(Level.SEVERE, null, ex);
                     }
 	    	
@@ -68,9 +72,7 @@ public class ServletRegistrarTipoRentabilidad extends  HttpServlet{
 		
 		
 		
-    
-    
-    
+ 
     
     
 }

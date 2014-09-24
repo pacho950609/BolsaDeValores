@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.model.ResultSetDataModel;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,8 +59,8 @@ public class ServletEliminaOrden extends  HttpServlet{
                             String mensaje="no se ha podido borrar la orden ya que se ha generado una solicitud con ella";
                             imprimirhtmlprimario(respuesta, mensaje);
                         }
-                        
-                        
+                        sepuedeEliminar.close();
+                        x.close();
                         
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletEliminaOrden.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,6 +108,8 @@ public class ServletEliminaOrden extends  HttpServlet{
                             String mensaje="no se ha podido borrar la orden ya que se ha generado una solicitud con ella";
                             imprimirhtmlprimario(respuesta, mensaje);
                         }
+                        sepuedeEliminar.close();
+                        x.close();
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletEliminaOrden.class.getName()).log(Level.SEVERE, null, ex);
                     }

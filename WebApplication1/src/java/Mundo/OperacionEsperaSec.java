@@ -29,11 +29,11 @@ public class OperacionEsperaSec
         return "OperacionEsperaSec{" + "id=" + id + ", emailInversionista=" + emailInversionista + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", tipoOperacion=" + tipoOperacion + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + ", precio=" + precio + '}';
     }
     private double precioUnidad;
-    private int cantidad;
+    private Integer cantidad;
     private String fecha;
-     private double precio;
+     private Double precio;
 
-    public OperacionEsperaSec(int idp) throws Exception 
+    public OperacionEsperaSec(int idp) 
     {
         conexionDB x = new conexionDB();
         String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_SEC WHERE ID="+idp;
@@ -48,18 +48,28 @@ public class OperacionEsperaSec
                 nitValor=Long.parseLong(r.getString("NIT_VALOR"));
                 nomValor=r.getString("NOM_VALOR");
                 precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
-                cantidad=Integer.parseInt(r.getString("CANTIDAD"));
+                try {
+                    cantidad=Integer.parseInt(r.getString("CANTIDAD"));
+                } catch (Exception e) {
+                    cantidad=null;
+                }
+                    
                 fecha= r.getString("FECHA");
-               precio=Double.parseDouble(r.getString("PRECIO"));
+                 try {
+                     precio=Double.parseDouble(r.getString("PRECIO"));
+                } catch (Exception e) {
+                    precio=null;
+                }
+              
                tipoOperacion= r.getString("TIPO_OPERACION");
-            
+            r.close();
             }
             else 
             {
                  throw new Exception("Se totea:"+ consulta);
             }
         } catch (Exception ex) {
-           throw ex;
+           
         }
         
     }
@@ -131,14 +141,14 @@ public class OperacionEsperaSec
         return precioUnidad;
     }
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
     public String getFecha() {
         return fecha;
     }
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
     

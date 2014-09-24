@@ -59,6 +59,7 @@ protected void doGet( HttpServletRequest request, HttpServletResponse response )
                              nuevoid = Integer.parseInt(maximoid.getString("MAX(ID)"))+1 ;
                               
                             }
+                            maximoid.close();
                             String sqlS="INSERT INTO OPERACIONES_EN_ESPERA_SEC VALUES("
                              +nuevoid 
                                     +",'"+emailInversionista 
@@ -844,7 +845,7 @@ respuesta.write( "<div id=\"global-zeroclipboard-html-bridge\" class=\"global-ze
                    {
                     respuesta.write(e.getMessage());    
                    }
-	    	
+	    	x.close();
 	    	
 	        
 	    }
@@ -883,6 +884,8 @@ respuesta.write( "<div id=\"global-zeroclipboard-html-bridge\" class=\"global-ze
                              nuevoid = Integer.parseInt(maximoid.getString("MAX(ID)"))+1 ;
                               
                             }
+                            maximoid.close();
+                            
                             String sqlS="INSERT INTO OPERACIONES_EN_ESPERA_PRIM VALUES("
                              +nuevoid +",'"+emailOferente + "','"+emailIntermediario+"'," +nit+",'"+nombreValor+"',"+precio+","+cantidad+",(SELECT SYSDATE FROM DUAL),"+seranull+")";
                              boolean rta = x.actualizarCrear(sqlS);

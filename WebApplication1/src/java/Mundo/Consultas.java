@@ -30,7 +30,8 @@ public class Consultas {
                    r.getString("FECHA"), 
                    r.getString("EMAIL_VEN"),  r.getString("EMAIL_COM"),  r.getString("EMAIL_INT_VEN"),  r.getString("EMAIL_INT_COM")));
         }
-        
+        r.close();
+        x.close();
         return res;
     }
     
@@ -48,8 +49,12 @@ public class Consultas {
                    r.getString("EMAIL_VEN"),  r.getString("EMAIL_COM"),  r.getString("EMAIL_INT_VEN"),  r.getString("EMAIL_INT_COM")));
         }
         
+        r.close();
+        x.close();
         return res;
     }
+    
+    
     
     
     public static ArrayList consultarValoresConNitDado(conexionDB conexion , String nit) throws SQLException
@@ -66,7 +71,7 @@ public class Consultas {
            lista.add(nuevo);
        }
          rta.close();
-        
+        conexion.close();
         
         
         return lista ;
@@ -89,6 +94,7 @@ public class Consultas {
            lista.add(nuevo);
        }
          rta.close();
+         conexion.close();
         
         }
         
@@ -112,6 +118,7 @@ public class Consultas {
                   }
                  rta.close();
                  
+                 
                   
                           String sentencia2 = "select * from OPERACIONES_EN_ESPERA_SEC where  solicitud is  not null and TIPO_OPERACION='VENTA'";
                 ResultSet rta2 =  conexion.consultar(sentencia2) ;
@@ -122,6 +129,7 @@ public class Consultas {
                      lista.add(nuevo);
                  }
                   rta2.close();
+                  conexion.close();
          }
          if(negociados.equalsIgnoreCase("no"))
          {
@@ -146,6 +154,7 @@ public class Consultas {
                      lista.add(nuevo);
                  }
                   rta2.close();
+                  conexion.close();
 
              
          }
@@ -176,7 +185,7 @@ public class Consultas {
        }
          rta.close();
         
-         
+         conexion.close();
          return lista ; 
          
      }
@@ -196,7 +205,7 @@ public class Consultas {
            lista.add(nuevo);
        }
          rta.close();
-        
+        conexion.close();
          
          return lista ; 
          
@@ -234,7 +243,7 @@ public class Consultas {
          
          
          
-         
+         conexion.close();
          
          
          
@@ -307,6 +316,63 @@ public class Consultas {
           return lista ;
       }
      
-     
+     public static ArrayList consultarOperacionesEnEsperaPorSolucitud(conexionDB x, String email)   throws SQLException      
+    {
+       ResultSet r= x.consultar("SELECT * FROM SOLICITUDES_COMPRA_SEC WHERE EMAIL_INT_VEN ='"+email+"'");
+        ArrayList res= new ArrayList();
+        
+        while (r.next())
+        {
+           res.add(new SolicitudCompra(Integer.parseInt(r.getString("ID")),
+                   Long.parseLong(r.getString("NIT_VALOR")), r.getString("NOM_VALOR"),
+                   Double.parseDouble(r.getString("PRECIO_UNITARIO")), Integer.parseInt(r.getString("CANTIDAD")),
+                   r.getString("FECHA"), 
+                   r.getString("EMAIL_VEN"),  r.getString("EMAIL_COM"),  r.getString("EMAIL_INT_VEN"),  r.getString("EMAIL_INT_COM")));
+        }
+        r.close();
+        x.close();
+        return res;
+    }
+
+    
+
+    public static ResultSet buscarVentasCompatiblesPrecioNullPrim(conexionDB x,OperacionEsperaSec o) {
+              ResultSet r = x.consultar("SELECT * \n" +
+                "FROM OPERACIONES_EN_ESPERA_PRIM \n" +
+                "WHERE \n" +
+                "SOLICITUD IS NULL AND CANTIDAD>= "+o.getCantidad()+ " AND NOM_VALOR= '"+o.getNomValor()+ "' AND NIT_VALOR=  "+o.getNitValor() );
+              
+              
+              return r;
+               
+    }
+
+    public static ResultSet buscarVentasCompatiblesPrecioNullSec(conexionDB x,OperacionEsperaSec o) {
+    ResultSet r =  x.consultar("SELECT * \n" +
+                "FROM OPERACIONES_EN_ESPERA_SEC \n" +
+                "WHERE \n" +
+                "SOLICITUD IS NULL AND CANTIDAD>= "+o.getCantidad()+ " AND NOM_VALOR= '"+o.getNomValor()+ "' AND NIT_VALOR= 8444146173 AND TIPO_OPERACION= 'VENTA'");
+    
+              return r;
+    }
+
+    public static ResultSet buscarVentasCompatiblesCantidadNullPrim(conexionDB x,OperacionEsperaSec o) {
+         ResultSet r = x.consultar("SELECT * \n" +
+                "FROM OPERACIONES_EN_ESPERA_PRIM \n" +
+                "WHERE \n" +
+                "SOLICITUD IS NULL AND (CANTIDAD*PRECIO_UNIDAD)>= "+o.getPrecio()+" AND NOM_VALOR= '"+o.getNomValor()+"' AND NIT_VALOR= "+o.getNitValor());
+    
+              return r;
+    }
+
+    public static ResultSet buscarVentasCompatiblesCantidadNullSec(conexionDB x,OperacionEsperaSec o) {
+          ResultSet r =  x.consultar("SELECT * \n" +
+                "FROM OPERACIONES_EN_ESPERA_SEC \n" +
+                "WHERE \n" +
+                "SOLICITUD IS NULL AND (CANTIDAD*PRECIO_UNIDAD)>= "+o.getPrecio()+" AND NOM_VALOR= '"+o.getNomValor()+"' AND NIT_VALOR= "+o.getNitValor()+" AND TIPO_OPERACION= 'VENTA'");
+    
+              return r;
+    }
+  
      
 }

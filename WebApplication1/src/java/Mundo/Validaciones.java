@@ -105,9 +105,19 @@ public class Validaciones {
             else{
                 return false ;
             }
+            
         } catch (SQLException ex) {
             Logger.getLogger(Validaciones.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        try {
+            rta.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Validaciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         
         return false ;
         
