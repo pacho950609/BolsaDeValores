@@ -35,7 +35,48 @@ public class ServletFiltrarUsuario extends  HttpServlet{
                             PrintWriter respuesta = response.getWriter() ;
                              conexionDB x = new conexionDB();
                        String tipoUsuario = request.getParameter( "tipoUsuario" );
+                            String tipoOperacion = request.getParameter( "tipoOperacion" );
+                            
+                            String fechaInferior= request.getParameter( "fechaInferior" );
+                             String fechaSuperior = request.getParameter( "fechaSuperior" );
+                                    String costo = request.getParameter( "Costo" );
+                                    
+                                    
+                                    
+                                    if(fechaInferior!=null && fechaSuperior!=null)
+                                    {
+                                        
+                                           try {
+                                    imprimirFiltroUsuario(respuesta, Consultas.operacionRangoFecha(fechaInferior, fechaSuperior, x));
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(ServletFiltrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                        
+                                        
+                                        
+                                        
+                                        
+                                    }
+                       if(costo!=null)
+                       {
+                           try {
+                                    imprimirFiltroUsuario(respuesta, Consultas.filtrarOperacionDadoPrecio(costo, x));
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(ServletFiltrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                       }
                        
+                            if(tipoOperacion!=null)
+                            {
+                                 try {
+                                    imprimirFiltroUsuario(respuesta, Consultas.operacionesDadoTipoDeOperacion(tipoOperacion, x));
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(ServletFiltrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                
+                            }
+                            
+                            
                        if(tipoUsuario!=null)
                        {
                            

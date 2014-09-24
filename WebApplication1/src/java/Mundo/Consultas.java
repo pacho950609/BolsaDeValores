@@ -315,6 +315,101 @@ public class Consultas {
           
           return lista ;
       }
+      
+      
+      public static ArrayList operacionesDadoTipoDeOperacion(String tipoOperacion , conexionDB conexion) throws SQLException
+      {
+          
+          ArrayList lista = new ArrayList();
+          
+          
+          
+          
+                if(tipoOperacion.equalsIgnoreCase("compra"))
+          {
+             
+                        String sentencia = "select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC where tipo_operacion='COMPRA'";
+                 ResultSet rta =  conexion.consultar(sentencia) ;
+
+                  while(rta.next())
+                  {
+                     OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta.getString("NIT_VALOR")), rta.getString("NOM_VALOR"),Double.parseDouble( rta.getString("NVL(PRECIO_UNIDAD,0)")),Integer.parseInt( rta.getString("NVL(CANTIDAD,0)")), rta.getString("FECHA"), rta.getString("TIPO_OPERACION"),Double.parseDouble( rta.getString("NVL(PRECIO,0)")));
+                      lista.add(nuevo);
+                  }
+                 rta.close();
+                 
+                  
+                        
+          }
+          
+          
+          if(tipoOperacion.equalsIgnoreCase("VENTA"))
+          {
+             
+                        String sentencia = "select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC WHERE TIPO_OPERACION='VENTA'";
+                 ResultSet rta =  conexion.consultar(sentencia) ;
+
+                  while(rta.next())
+                  {
+                     OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta.getString("NIT_VALOR")), rta.getString("NOM_VALOR"),Double.parseDouble( rta.getString("NVL(PRECIO_UNIDAD,0)")),Integer.parseInt( rta.getString("NVL(CANTIDAD,0)")), rta.getString("FECHA"), rta.getString("TIPO_OPERACION"),Double.parseDouble( rta.getString("NVL(PRECIO,0)")));
+                      lista.add(nuevo);
+                  }
+                 rta.close();
+                 
+                  
+                          String sentencia2 = "select * from OPERACIONES_EN_ESPERA_PRIM";
+                ResultSet rta2 =  conexion.consultar(sentencia2) ;
+
+                 while(rta2.next())
+                 {
+                    OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta2.getString("NIT_VALOR")), rta2.getString("NOM_VALOR"),Double.parseDouble( rta2.getString("PRECIO_UNIDAD")),Integer.parseInt( rta2.getString("CANTIDAD")), rta2.getString("FECHA"), "VENTA",Double.parseDouble("0"));
+                      lista.add(nuevo);
+                 }
+                  rta2.close();
+       
+          }
+          
+          
+          
+          
+          return lista;
+      }
+              
+      
+     public static ArrayList filtrarOperacionDadoPrecio(String precio , conexionDB conexion) throws SQLException
+             {
+                 
+                 ArrayList lista = new ArrayList();
+                 
+                 
+                 
+                        String sentencia = "select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC where nvl(precio,0)="+precio+" or nvl(precio_unidad,0)="+precio;
+                 ResultSet rta =  conexion.consultar(sentencia) ;
+
+                  while(rta.next())
+                  {
+                     OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta.getString("NIT_VALOR")), rta.getString("NOM_VALOR"),Double.parseDouble( rta.getString("NVL(PRECIO_UNIDAD,0)")),Integer.parseInt( rta.getString("NVL(CANTIDAD,0)")), rta.getString("FECHA"), rta.getString("TIPO_OPERACION"),Double.parseDouble( rta.getString("NVL(PRECIO,0)")));
+                      lista.add(nuevo);
+                  }
+                 rta.close();
+                 
+                  
+                          String sentencia2 = "select * from OPERACIONES_EN_ESPERA_PRIM where PRECIO_UNIDAD ="+precio;
+                ResultSet rta2 =  conexion.consultar(sentencia2) ;
+
+                 while(rta2.next())
+                 {
+                    OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta2.getString("NIT_VALOR")), rta2.getString("NOM_VALOR"),Double.parseDouble( rta2.getString("PRECIO_UNIDAD")),Integer.parseInt( rta2.getString("CANTIDAD")), rta2.getString("FECHA"), "VENTA",Double.parseDouble("0"));
+                      lista.add(nuevo);
+                 }
+                  rta2.close();
+                 
+                 
+                 
+                 
+                 return lista;
+             }
+     
      
      public static ArrayList consultarOperacionesEnEsperaPorSolucitud(conexionDB x, String email)   throws SQLException      
     {
@@ -374,5 +469,39 @@ public class Consultas {
               return r;
     }
   
+     public static ArrayList operacionRangoFecha(String fechaInferior , String fechaSuperior , conexionDB conexion) throws SQLException
+     {
+         ArrayList lista= new ArrayList();
+         
+         
+                 String sentencia = "select  ID , EMAIL_INVER , nom_valor ,NIT_VALOR, TIPO_OPERACION, NVL(PRECIO_UNIDAD,0) , NVL(CANTIDAD,0) , FECHA , EMAIL_INTER , NVL(PRECIO,0) from OPERACIONES_EN_ESPERA_SEC where FECHA  between  to_date('"+fechaInferior+"','yyyy-mm-dd') and to_date('"+fechaSuperior+"','yyyy-mm-dd')";
+                 ResultSet rta =  conexion.consultar(sentencia) ;
+
+                  while(rta.next())
+                  {
+                     OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta.getString("NIT_VALOR")), rta.getString("NOM_VALOR"),Double.parseDouble( rta.getString("NVL(PRECIO_UNIDAD,0)")),Integer.parseInt( rta.getString("NVL(CANTIDAD,0)")), rta.getString("FECHA"), rta.getString("TIPO_OPERACION"),Double.parseDouble( rta.getString("NVL(PRECIO,0)")));
+                      lista.add(nuevo);
+                  }
+                 rta.close();
+                 
+                  
+                          String sentencia2 = "select * from OPERACIONES_EN_ESPERA_PRIM where FECHA  between  to_date('"+fechaInferior+"','yyyy-mm-dd') and to_date('"+fechaSuperior+"','yyyy-mm-dd') ";
+                ResultSet rta2 =  conexion.consultar(sentencia2) ;
+
+                 while(rta2.next())
+                 {
+                    OperacionEsperaSec nuevo = new OperacionEsperaSec(0, " ", " ", Long.parseLong(rta2.getString("NIT_VALOR")), rta2.getString("NOM_VALOR"),Double.parseDouble( rta2.getString("PRECIO_UNIDAD")),Integer.parseInt( rta2.getString("CANTIDAD")), rta2.getString("FECHA"), "VENTA",Double.parseDouble("0"));
+                      lista.add(nuevo);
+                 }
+                  rta2.close();
+         
+         
+         
+         
+         
+         
+         return lista;
+     }
+     
      
 }
