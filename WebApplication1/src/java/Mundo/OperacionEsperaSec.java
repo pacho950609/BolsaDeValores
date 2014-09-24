@@ -65,7 +65,7 @@ public class OperacionEsperaSec
     }
 
     public OperacionEsperaSec(int id, String emailIntermediario, 
-            String emailInversionista, int nitValor, String nomValor, 
+            String emailInversionista, long nitValor, String nomValor, 
             double precioUnidad, int cantidad, String fecha, String tipoOperacion, Double precio) {
         this.id = id;
         this.emailInversionista = emailInversionista;

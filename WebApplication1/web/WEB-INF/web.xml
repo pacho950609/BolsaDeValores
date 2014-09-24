@@ -64,6 +64,13 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-class>Interfaz.ServletConsultarExistenciaValor</servlet-class>
  </servlet>
  
+  <servlet>
+  <servlet-name>ServletFiltrarUsuario</servlet-name>
+  <servlet-class>Interfaz.ServletFiltrarUsuario</servlet-class>
+ </servlet>
+ 
+ 
+ 
  
  <!-- MAPPING -->
  
@@ -111,6 +118,13 @@ Autor: Pablo Barvo - 08-Feb-2006
   <servlet-name>ServletConsultarExistenciaValor</servlet-name>
   <url-pattern>/ServletConsultarExistenciaValor.htm</url-pattern>
  </servlet-mapping>
+ 
+  <servlet-mapping>
+  <servlet-name>ServletFiltrarUsuario</servlet-name>
+  <url-pattern>/ServletFiltrarUsuario.htm</url-pattern>
+ </servlet-mapping>
+ 
+
  
 	
    
