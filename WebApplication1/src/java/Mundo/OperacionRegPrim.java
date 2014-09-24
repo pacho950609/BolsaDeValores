@@ -21,7 +21,9 @@ public class OperacionRegPrim
 {
       private int id;
     private String emailOferente;
-    private String emailIntermediario;
+    private String emailIntermediarioOfer;
+    private String emailInver;
+    private String emailIntermediarioInver;
     private long nitValor;
     private String nomValor;
     private double precioUnidad;
@@ -39,7 +41,9 @@ public class OperacionRegPrim
             {
                 id=idp;
                 emailOferente=r.getString("EMAIL_OFER");
-                emailIntermediario=r.getString("EMAIL_INTER");
+                emailIntermediarioOfer=r.getString("EMAIL_INTE_OFER");emailOferente=r.getString("EMAIL_OFER");
+                emailIntermediarioInver=r.getString("EMAIL_INTER_INVER");
+                emailInver=r.getString("EMAIL_INVER");
                 nitValor=Long.parseLong(r.getString("NIT_VALOR"));
                 nomValor=r.getString("NOM_VALOR");
                 precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
@@ -58,21 +62,8 @@ public class OperacionRegPrim
         
     }
 
-    @Override
-    public String toString() {
-        return "OperacionRegPrim{" + "id=" + id + ", emailOferente=" + emailOferente + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
-    }
-
-    public OperacionRegPrim(int id, String emailOferente, String emailIntermediario, long nitValor, String nomValor, double precioUnidad, int cantidad, String fecha) {
-        this.id = id;
-        this.emailOferente = emailOferente;
-        this.emailIntermediario = emailIntermediario;
-        this.nitValor = nitValor;
-        this.nomValor = nomValor;
-        this.precioUnidad = precioUnidad;
-        this.cantidad = cantidad;
-        this.fecha = fecha;
-    }
+   
+    
 
     
     
@@ -106,10 +97,24 @@ public class OperacionRegPrim
         return emailOferente;
     }
 
-    public String getEmailIntermediario() {
-        return emailIntermediario;
+    public String getEmailIntermediarioOfer() {
+        return emailIntermediarioOfer;
     }
 
+    public String getEmailInver() {
+        return emailInver;
+    }
+
+    public String getEmailIntermediarioInver() {
+        return emailIntermediarioInver;
+    }
+
+    @Override
+    public String toString() {
+        return "OperacionRegPrim{" + "id=" + id + ", emailOferente=" + emailOferente + ", emailIntermediarioOfer=" + emailIntermediarioOfer + ", emailInver=" + emailInver + ", emailIntermediarioInver=" + emailIntermediarioInver + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
+    }
+
+   
     public long getNitValor() {
         return nitValor;
     }

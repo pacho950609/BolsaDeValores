@@ -446,7 +446,7 @@ public class Consultas {
     ResultSet r =  x.consultar("SELECT * \n" +
                 "FROM OPERACIONES_EN_ESPERA_SEC \n" +
                 "WHERE \n" +
-                "SOLICITUD IS NULL AND CANTIDAD>= "+o.getCantidad()+ " AND NOM_VALOR= '"+o.getNomValor()+ "' AND NIT_VALOR= 8444146173 AND TIPO_OPERACION= 'VENTA'");
+                "SOLICITUD IS NULL AND CANTIDAD>= "+o.getCantidad()+ " AND NOM_VALOR= '"+o.getNomValor()+ "' AND NIT_VALOR= "+o.getNitValor()+" AND TIPO_OPERACION= 'VENTA'");
     
               return r;
     }

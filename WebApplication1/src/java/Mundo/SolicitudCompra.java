@@ -88,15 +88,16 @@ public class SolicitudCompra
     {
         conexionDB x= new conexionDB();
          ResultSet r =  x.consultar("SELECT * \n" +
-                "FROM SOLICITUD_COMPRA_PRIM \n" +
+                "FROM SOLICITUDES_COMPRA_PRIM \n" +
                 "WHERE \n" +
                 "ID= "+id);
          SolicitudCompra s= null;
-         
+         r.next();
              s= new SolicitudCompra(Integer.parseInt(r.getString("ID")), Long.parseLong(r.getString("NIT_VALOR")), r.getString("NOM_VALOR"), 
                      Double.parseDouble(r.getString("PRECIO_UNITARIO")), Integer.parseInt(r.getString("CANTIDAD")), r.getString("FECHA"), 
                      r.getString("EMAIL_VEN"), r.getString("EMAIL_COM"), r.getString("EMAIL_INT_VEN"), r.getString("EMAIL_INT_COM"));
-    
+    r.close();
+    x.close();
         return s;
     }
         
@@ -104,20 +105,75 @@ public class SolicitudCompra
     {
         conexionDB x= new conexionDB();
          ResultSet r =  x.consultar("SELECT * \n" +
-                "FROM SOLICITUD_COMPRA_SEC \n" +
+                "FROM SOLICITUDES_COMPRA_SEC \n" +
                 "WHERE \n" +
                 "ID= "+id);
          SolicitudCompra s= null;
-         
+         r.next();
              s= new SolicitudCompra(Integer.parseInt(r.getString("ID")), Long.parseLong(r.getString("NIT_VALOR")), r.getString("NOM_VALOR"), 
                      Double.parseDouble(r.getString("PRECIO_UNITARIO")), Integer.parseInt(r.getString("CANTIDAD")), r.getString("FECHA"), 
                      r.getString("EMAIL_VEN"), r.getString("EMAIL_COM"), r.getString("EMAIL_INT_VEN"), r.getString("EMAIL_INT_COM"));
+    x.close();
+    r.close();
     
         return s;
     }
         
 
+    public static boolean insertarSolicitudPrimaria( String nombreValor, long nit, int cantidad, 
+            double precioUnitario, String emailIntCom , String emailCom, String emailIntVen,
+            String emailVen )
+    {
+        conexionDB x= new conexionDB();
+        int nuevoid=0;
+        try {
+              ResultSet maximoid= x.consultar("SELECT MAX (ID) FROM SOLICITUDES_COMPRA_PRIM ");
+                            
+                            if(maximoid.next())
+                            {
+                             nuevoid = Integer.parseInt(maximoid.getString("MAX(ID)"))+1 ;
+                              
+                            }
+                            maximoid.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+        boolean res= x.actualizarCrear("INSERT INTO SOLICITUDES_COMPRA_PRIM"
+         + " VALUES ("+nuevoid+", '"+nombreValor+"', "+nit+", "+cantidad+", "+precioUnitario+", '"
+                +emailIntCom+"','"+emailCom+"','"+emailIntVen+"','"+emailVen+"', (SELECT SYSDATE FROM DUAL))");
+        
+        x.close();
+        return res;
+    } 
     
+    public static boolean insertarSolicitudSecundaria( String nombreValor, long nit, int cantidad, 
+            double precioUnitario, String emailIntCom , String emailCom, String emailIntVen,
+            String emailVen )
+    {
+         conexionDB x= new conexionDB();
+        int nuevoid=0;
+        try {
+              ResultSet maximoid= x.consultar("SELECT MAX (ID) FROM SOLICITUDES_COMPRA_SEC ");
+                            
+                            if(maximoid.next())
+                            {
+                             nuevoid = Integer.parseInt(maximoid.getString("MAX(ID)"))+1 ;
+                              
+                            }
+                            maximoid.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        boolean res= x.actualizarCrear("INSERT INTO SOLICITUDES_COMPRA_SEC"
+         + " VALUES ("+nuevoid+", '"+nombreValor+"', "+nit+", "+cantidad+", "+precioUnitario+", '"
+                +emailIntCom+"','"+emailCom+"','"+emailIntVen+"','"+emailVen+"', (SELECT SYSDATE FROM DUAL))");
+        
+        x.close();
+        return res;
+    } 
    
     
 }

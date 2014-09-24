@@ -16,16 +16,13 @@ import java.sql.ResultSet;
  */
 public class OperacionRegSec {
     private int id;
-    private String emailInversionista;
-    private String emailIntermediario;
+    private String emailInverCom;
+    private String emailInterCom;
+    private String emailInverVen;
+    private String emailInterVen;
     private long nitValor;
     private String nomValor;
     private String tipoOperacion;
-
-    @Override
-    public String toString() {
-        return "OperacionEsperaSec{" + "id=" + id + ", emailInversionista=" + emailInversionista + ", emailIntermediario=" + emailIntermediario + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", tipoOperacion=" + tipoOperacion + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
-    }
     private double precioUnidad;
     private int cantidad;
     private String fecha;
@@ -41,8 +38,10 @@ public class OperacionRegSec {
             if(r.next())
             {
                 id=idp;
-                emailInversionista=r.getString("EMAIL_INVER");
-                emailIntermediario=r.getString("EMAIL_INTER");
+                emailInverCom=r.getString("EMAIL_COM");
+                emailInverVen=r.getString("EMAIL_VEN");
+                emailInterCom=r.getString("EMAIL_INTER_COM");
+                emailInterVen=r.getString("EMAIL_INTER_VEN");
                 nitValor=Long.parseLong(r.getString("NIT_VALOR"));
                 nomValor=r.getString("NOM_VALOR");
                 precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
@@ -61,24 +60,11 @@ public class OperacionRegSec {
         
     }
 
-    public OperacionRegSec(int id, String emailIntermediario, 
-            String emailInversionista, int nitValor, String nomValor, 
-            double precioUnidad, int cantidad, String fecha, String tipoOperacion) {
-        this.id = id;
-        this.emailInversionista = emailInversionista;
-        this.emailIntermediario = emailIntermediario;
-        this.nitValor = nitValor;
-        this.nomValor = nomValor;
-        this.precioUnidad = precioUnidad;
-        this.cantidad = cantidad;
-        this.fecha = fecha;
-        this.tipoOperacion = tipoOperacion;
-       
-    }
+   
 
     
     
-    public static boolean insertarOperacion(int id, String emailInver, 
+    public static boolean insertarOperacionREVISARESTAMAL(int id, String emailInver, 
             String emailIntermediario, int nitValor, String nomValor, 
             double precioUnidad, int cantidad, Date fecha, String tipoOperacion, String precio) {
         conexionDB x = new conexionDB();
@@ -108,13 +94,28 @@ public class OperacionRegSec {
         return id;
     }
 
-    public String getEmailInversionista() {
-        return emailInversionista;
+    public String getEmailInverCom() {
+        return emailInverCom;
     }
 
-    public String getEmailIntermediario() {
-        return emailIntermediario;
+    public String getEmailInterCom() {
+        return emailInterCom;
     }
+
+    public String getEmailInverVen() {
+        return emailInverVen;
+    }
+
+    public String getEmailInterVen() {
+        return emailInterVen;
+    }
+
+    @Override
+    public String toString() {
+        return "OperacionRegSec{" + "id=" + id + ", emailInverCom=" + emailInverCom + ", emailInterCom=" + emailInterCom + ", emailInverVen=" + emailInverVen + ", emailInterVen=" + emailInterVen + ", nitValor=" + nitValor + ", nomValor=" + nomValor + ", tipoOperacion=" + tipoOperacion + ", precioUnidad=" + precioUnidad + ", cantidad=" + cantidad + ", fecha=" + fecha + '}';
+    }
+
+   
 
     public long getNitValor() {
         return nitValor;

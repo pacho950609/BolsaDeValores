@@ -9,6 +9,7 @@ import Conexion.conexionDB;
 import Mundo.Consultas;
 import Mundo.OperacionEsperaPrim;
 import Mundo.OperacionEsperaSec;
+import Mundo.OperacionRegPrim;
 import Mundo.SolicitudCompra;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,8 +33,23 @@ public class ServletRegistrarOrden extends  HttpServlet{
     public static String SOLICITAR_COMPRA_SEC= "Solicitar compra mercado secundario";
     	
 	protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException  {
-	      
-			
+	     String op= request.getParameter("operacion");
+               int idCompra = Integer.parseInt(request.getParameter("idCompra"));
+               int idVenta = Integer.parseInt(request.getParameter("idVenta"));
+                    conexionDB x = new conexionDB();
+                    PrintWriter respuesta = response.getWriter() ;
+            if(op.equals(SOLICITAR_COMPRA_PRIM))
+            {
+                  ServletRegistrarOperacionBursatil.imprimirHeader(respuesta);
+                  realizarSolicitudPrim(idCompra, idVenta, respuesta, x);
+                  ServletRegistrarOperacionBursatil.imprimirFooter(respuesta);
+            }
+            if(op.equals(SOLICITAR_COMPRA_SEC))
+            {
+                  ServletRegistrarOperacionBursatil.imprimirHeader(respuesta);
+                  realizarSolicitudSec(idCompra, idVenta, respuesta, x);
+                  ServletRegistrarOperacionBursatil.imprimirFooter(respuesta);
+            }
        
 	        
 	    }
@@ -80,16 +96,15 @@ public class ServletRegistrarOrden extends  HttpServlet{
         OperacionEsperaSec o= new OperacionEsperaSec(id);
         if(o.getPrecio()==null)
         {
-            transarCasoPrecioNull(o, respuesta, x);
+            transarCasoPrecioNull(o, respuesta, x, id);
             
         }
         else
         {
-            transarCasoCantidadNull(o, respuesta, x);
+            transarCasoCantidadNull(o, respuesta, x, id);
         }
-        
     }
-        private void transarCasoPrecioNull(OperacionEsperaSec o, PrintWriter respuesta, conexionDB x) {
+        private void transarCasoPrecioNull(OperacionEsperaSec o, PrintWriter respuesta, conexionDB x, int id) {
            ResultSet rta= Consultas.buscarVentasCompatiblesPrecioNullPrim(x,o);
             
              
@@ -105,17 +120,18 @@ public class ServletRegistrarOrden extends  HttpServlet{
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
                     respuesta.write( "                  <th>Fecha</th>\r\n" );
-                    respuesta.write( "                  <th>Buscar comprador</th>\r\n" );
+                    respuesta.write( "                  <th>Solicitar compra</th>\r\n" );
         
           try {
               while(rta.next())
               {
-                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOperacionBursatil.htm\" method=\"get\">");
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"get\">");
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write( "              </thead>\r\n" );
                   respuesta.write( "              <tbody>\r\n" );
                   respuesta.write( "                <tr>\r\n" );
-                  respuesta.write("<input type=\"hidden\" value=\""+rta.getString("ID")+"\" name=\"id\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+rta.getString("ID")+"\" name=\"idVenta\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+id+"\" name=\"idCompra\"/>");
                   respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_PRIM+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rta.getString("EMAIL_OFERENTE")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("EMAIL_INTERMEDIARIO")+"</td>\r\n" );
@@ -124,7 +140,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                   respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
-                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Buscar</button>   </td>\r\n" );
+                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Solicitar</button>   </td>\r\n" );
                   respuesta.write( "                </tr>\r\n" );
                   respuesta.write("</form>");
               }
@@ -134,68 +150,205 @@ public class ServletRegistrarOrden extends  HttpServlet{
                    
              
                                                             } catch (SQLException ex) {
-                                                               respuesta.write("se totea "+ex.getMessage());
+                                                               respuesta.write("Error en  opciones de compra mercado primario: "+ex.getMessage());
                                                             }
              //cierre de coneccion
                                                            try {
                                                               rta.close();
+                                                              x.close();
                                                           } catch (SQLException ex) {
                                                               Logger.getLogger(ServletRegistrarOrden.class.getName()).log(Level.SEVERE, null, ex);
                                                           }
+           x = new conexionDB();
+           ResultSet rta1= Consultas.buscarVentasCompatiblesPrecioNullSec(x,o);
            
-           rta= Consultas.buscarVentasCompatiblesPrecioNullSec(x,o);
+                respuesta.write("                   <h3>Opciones de compra en el mercado Secundario</h3>");
+         respuesta.write( "          <div class=\"table-responsive\">\r\n" );
+                    respuesta.write( "            <table class=\"table table-striped\">\r\n" );
+                    respuesta.write( "              <thead>\r\n" );
+                    respuesta.write( "                <tr>\r\n" );
+                    respuesta.write( "                  <th>Email Inversionista</th>\r\n" );
+                    respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
+                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Valor</th>\r\n" );
+                    respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
+                    respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                    respuesta.write( "                  <th>Fecha</th>\r\n" );
+                    respuesta.write( "                  <th>Solicitar compra</th>\r\n" );
+        
+          try {
+              while(rta1.next())
+              {
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"get\">");
+                  respuesta.write( "                </tr>\r\n" );
+                  respuesta.write( "              </thead>\r\n" );
+                  respuesta.write( "              <tbody>\r\n" );
+                  respuesta.write( "                <tr>\r\n" );
+                  respuesta.write("<input type=\"hidden\" value=\""+rta1.getString("ID")+"\" name=\"idVenta\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+id+"\" name=\"idCompra\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_SEC+"\" name=\"operacion\"/>");
+                  respuesta.write( "                  <td>"+rta1.getString("EMAIL_INVER")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("EMAIL_INTER")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("NOM_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("PRECIO_UNIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("CANTIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("FECHA")+"</td>\r\n" );
+                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Solicitar</button>   </td>\r\n" );
+                  respuesta.write( "                </tr>\r\n" );
+                  respuesta.write("</form>");
+              }
+          }
+              catch (Exception ex) {
+                      respuesta.write("se totea en Opciones de compra en el mercado Secundario"+ex.getMessage());
+                                                            }
+              respuesta.write( "              </tbody>\r\n" );
+                    respuesta.write( "            </table>\r\n" );
+                    respuesta.write( "          </div>\r\n" );
+                   
            
-         
+           
+           
+           
+           
            //cierre de coneccion
                                                             
                                                           try {
-                                                              rta.close();
+                                                              x.close();
+                                                              rta1.close();
+                                                              
                                                           } catch (Exception ex) {
                                                               Logger.getLogger(ServletRegistrarOrden.class.getName()).log(Level.SEVERE, null, ex);
                                                           }
            
            
        }
-        private void transarCasoCantidadNull(OperacionEsperaSec o, PrintWriter respuesta, conexionDB x) {
-       ResultSet rta= Consultas.buscarVentasCompatiblesCantidadNullPrim(x,o);
-       
-       
-       
-       
-        //cierre de coneccion
-                                                            
-                                                          try {
+        private void transarCasoCantidadNull(OperacionEsperaSec o, PrintWriter respuesta, conexionDB x, int id) {
+      ResultSet rta= Consultas.buscarVentasCompatiblesCantidadNullPrim(x,o);
+            
+             
+           respuesta.write("                   <h3>Opciones de compra en el mercado primario</h3>");
+         respuesta.write( "          <div class=\"table-responsive\">\r\n" );
+                    respuesta.write( "            <table class=\"table table-striped\">\r\n" );
+                    respuesta.write( "              <thead>\r\n" );
+                    respuesta.write( "                <tr>\r\n" );
+                    respuesta.write( "                  <th>Email Oferente</th>\r\n" );
+                    respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
+                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Valor</th>\r\n" );
+                    respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
+                    respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                    respuesta.write( "                  <th>Fecha</th>\r\n" );
+                    respuesta.write( "                  <th>Solicitar compra</th>\r\n" );
+        
+          try {
+              while(rta.next())
+              {
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"get\">");
+                  respuesta.write( "                </tr>\r\n" );
+                  respuesta.write( "              </thead>\r\n" );
+                  respuesta.write( "              <tbody>\r\n" );
+                  respuesta.write( "                <tr>\r\n" );
+                  respuesta.write("<input type=\"hidden\" value=\""+rta.getString("ID")+"\" name=\"idVenta\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+id+"\" name=\"idCompra\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_PRIM+"\" name=\"operacion\"/>");
+                  respuesta.write( "                  <td>"+rta.getString("EMAIL_OFERENTE")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("EMAIL_INTERMEDIARIO")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta.getString("FECHA")+"</td>\r\n" );
+                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Solicitar</button>   </td>\r\n" );
+                  respuesta.write( "                </tr>\r\n" );
+                  respuesta.write("</form>");
+              }
+              respuesta.write( "              </tbody>\r\n" );
+                    respuesta.write( "            </table>\r\n" );
+                    respuesta.write( "          </div>\r\n" );
+                   
+             
+                                                            } catch (SQLException ex) {
+                                                               respuesta.write("Error en  opciones de compra mercado primario: "+ex.getMessage());
+                                                            }
+             //cierre de coneccion
+                                                           try {
                                                               rta.close();
+                                                              x.close();
                                                           } catch (SQLException ex) {
                                                               Logger.getLogger(ServletRegistrarOrden.class.getName()).log(Level.SEVERE, null, ex);
                                                           }
-       
-               rta= Consultas.buscarVentasCompatiblesCantidadNullSec(x,o);  
-               
-               
-               
-                //cierre de coneccion
+           x = new conexionDB();
+           ResultSet rta1= Consultas.buscarVentasCompatiblesCantidadNullSec(x,o);
+           
+                respuesta.write("                   <h3>Opciones de compra en el mercado Secundario</h3>");
+         respuesta.write( "          <div class=\"table-responsive\">\r\n" );
+                    respuesta.write( "            <table class=\"table table-striped\">\r\n" );
+                    respuesta.write( "              <thead>\r\n" );
+                    respuesta.write( "                <tr>\r\n" );
+                    respuesta.write( "                  <th>Email Inversionista</th>\r\n" );
+                    respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
+                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Valor</th>\r\n" );
+                    respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
+                    respuesta.write( "                  <th>Cantidad</th>\r\n" );
+                    respuesta.write( "                  <th>Fecha</th>\r\n" );
+                    respuesta.write( "                  <th>Solicitar compra</th>\r\n" );
+        
+          try {
+              while(rta1.next())
+              {
+                  respuesta.write(" <form role=\"form\" action=\"ServletRegistrarOrden.htm\" method=\"get\">");
+                  respuesta.write( "                </tr>\r\n" );
+                  respuesta.write( "              </thead>\r\n" );
+                  respuesta.write( "              <tbody>\r\n" );
+                  respuesta.write( "                <tr>\r\n" );
+                  respuesta.write("<input type=\"hidden\" value=\""+rta1.getString("ID")+"\" name=\"idVenta\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+id+"\" name=\"idCompra\"/>");
+                  respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_SEC+"\" name=\"operacion\"/>");
+                  respuesta.write( "                  <td>"+rta1.getString("EMAIL_INVER")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("EMAIL_INTER")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("NOM_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("PRECIO_UNIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("CANTIDAD")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+rta1.getString("FECHA")+"</td>\r\n" );
+                  respuesta.write( "                  <td>    <button type=\"submit\" class=\"btn btn-default\">Solicitar</button>   </td>\r\n" );
+                  respuesta.write( "                </tr>\r\n" );
+                  respuesta.write("</form>");
+              }
+          }
+              catch (Exception ex) {
+                      respuesta.write("se totea en Opciones de compra en el mercado Secundario"+ex.getMessage());
+                                                            }
+              respuesta.write( "              </tbody>\r\n" );
+                    respuesta.write( "            </table>\r\n" );
+                    respuesta.write( "          </div>\r\n" );
+                   
+           
+           
+           
+           
+           
+           //cierre de coneccion
                                                             
                                                           try {
-                                                              rta.close();
-                                                          } catch (SQLException ex) {
+                                                              x.close();
+                                                              rta1.close();
+                                                              
+                                                          } catch (Exception ex) {
                                                               Logger.getLogger(ServletRegistrarOrden.class.getName()).log(Level.SEVERE, null, ex);
                                                           }
         }	
 
-        private void aceptarSolicitudPrim(int id, PrintWriter respuesta, conexionDB x) 
-        {
+        
+        
+        private void aceptarSolicitudPrim(int id, PrintWriter respuesta, conexionDB x) {
         try {
             SolicitudCompra s= SolicitudCompra.darsolicitudPrim(id);
             
             
             OperacionEsperaPrim opPrim= OperacionEsperaPrim.obtenerPorIdSolicitud(id);
-            
-            
-            
-            
-            
-            
             
             
             
@@ -206,6 +359,77 @@ public class ServletRegistrarOrden extends  HttpServlet{
         private void aceptarSolicitudSec(int id, PrintWriter respuesta, conexionDB x) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+        private void realizarSolicitudPrim(int idCompra, int idVenta, PrintWriter respuesta, conexionDB x) {
+            
+        try {
+            OperacionEsperaPrim vendedor =new OperacionEsperaPrim(idVenta);
+            OperacionEsperaSec comprador=  new OperacionEsperaSec(idCompra);
+            if(SolicitudCompra.insertarSolicitudPrimaria
+        (comprador.getNomValor(),vendedor.getNitValor(),comprador.getCantidad(),vendedor.getPrecioUnidad(),
+                comprador.getEmailIntermediario(), comprador.getEmailInversionista(), vendedor.getEmailIntermediario()
+        ,       vendedor.getEmailOferente()))
+            {
+             respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Orden realizada\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">La solicitud se ingreso con exito al sistema</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+            }
+            else
+            {
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Orden fallida\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">La solicitud no se ingreso al sistema</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+            }
+                
+            
+            
+        } catch (Exception ex) {
+            respuesta.write(ex.getMessage());
+        }
+        
+        
+        }
+        private void realizarSolicitudSec(int idCompra, int idVenta, PrintWriter respuesta, conexionDB x) {
+            try {
+            OperacionEsperaSec vendedor =new OperacionEsperaSec(idVenta);
+            OperacionEsperaSec comprador=  new OperacionEsperaSec(idCompra);
+            if(SolicitudCompra.insertarSolicitudSecundaria
+        (comprador.getNomValor(),vendedor.getNitValor(),comprador.getCantidad(),vendedor.getPrecioUnidad(),
+                comprador.getEmailIntermediario(), comprador.getEmailInversionista(), vendedor.getEmailIntermediario()
+        ,       vendedor.getEmailInversionista()))
+            {
+             respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Orden realizada\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">La solicitud se ingreso con exito al sistema</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+            }
+            else
+            {
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Orden fallida\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">La solicitud no se ingreso al sistema</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+            }
+                
+            
+            
+        } catch (Exception ex) {
+            respuesta.write(ex.getMessage());
+        }
+        
+        }
+        
+        
         
         
        

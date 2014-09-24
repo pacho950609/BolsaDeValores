@@ -889,7 +889,7 @@ respuesta.write( "<div id=\"global-zeroclipboard-html-bridge\" class=\"global-ze
                             String sqlS="INSERT INTO OPERACIONES_EN_ESPERA_PRIM VALUES("
                              +nuevoid +",'"+emailOferente + "','"+emailIntermediario+"'," +nit+",'"+nombreValor+"',"+precio+","+cantidad+",(SELECT SYSDATE FROM DUAL),"+seranull+")";
                              boolean rta = x.actualizarCrear(sqlS);
-                        
+                        x.close();
                            
                            
                             if(rta)

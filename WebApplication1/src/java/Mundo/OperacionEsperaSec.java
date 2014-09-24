@@ -7,6 +7,7 @@
 package Mundo;
 
 import Conexion.conexionDB;
+import com.sun.faces.taglib.html_basic.SelectOneListboxTag;
 import java.sql.Date;
 import java.sql.ResultSet;
 
@@ -32,6 +33,7 @@ public class OperacionEsperaSec
     private Integer cantidad;
     private String fecha;
      private Double precio;
+     private String solicitud;
 
     public OperacionEsperaSec(int idp) 
     {
@@ -60,7 +62,12 @@ public class OperacionEsperaSec
                 } catch (Exception e) {
                     precio=null;
                 }
-              
+                try {
+                    solicitud=r.getString("SOLICITUD");
+                } catch (Exception e) {
+                    solicitud= null;
+                }
+
                tipoOperacion= r.getString("TIPO_OPERACION");
             r.close();
             }
