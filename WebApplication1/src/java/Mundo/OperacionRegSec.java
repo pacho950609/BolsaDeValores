@@ -9,6 +9,7 @@ package Mundo;
 import Conexion.conexionDB;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -64,20 +65,29 @@ public class OperacionRegSec {
 
     
     
-    public static boolean insertarOperacionREVISARESTAMAL(int id, String emailInver, 
-            String emailIntermediario, int nitValor, String nomValor, 
-            double precioUnidad, int cantidad, Date fecha, String tipoOperacion, String precio) {
+    public static boolean insertarOperacion(String emailInverCom, 
+            String emailIntermediarioCom,String emailInverVen, 
+            String emailIntermediarioVen, int nitValor, String nomValor, 
+            double precioUnidad, int cantidad, Date fecha, String tipoOperacion, String precio) throws SQLException {
         conexionDB x = new conexionDB();
+         ResultSet maximoid= x.consultar("SELECT MAX (ID) FROM  OPERACIONES_EN_ESPERA_SEC ");
+                            int nuevoid=0;
+                            if(maximoid.next())
+                            {
+                             nuevoid = Integer.parseInt(maximoid.getString("MAX(ID)"))+1 ;
+                              
+                            }
+                            maximoid.close();
          String consulta="INSERT INTO OPERACIONES_REGISTRADAS_SEC VALUES("
-                                    +id 
-                                    +",'"+emailInver
+                                    +maximoid
+                                    +",'"+emailInverCom
                                     + "','" +nomValor                                    
                                     + "'," +nitValor
                                     +",'"+tipoOperacion
                                     +"',"+precioUnidad
                                     +","+cantidad
                                     +","+fecha
-                                    +",'"+emailIntermediario
+                                    +",'"+emailIntermediarioCom
                                     +"',"+precio
                                     ;
        return x.actualizarCrear(consulta);

@@ -19,9 +19,48 @@ import java.util.logging.Logger;
  */
 public class OperacionEsperaPrim 
 {
+  
 
-    public static OperacionEsperaPrim obtenerPorIdSolicitud(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public OperacionEsperaPrim obtenerPorIdSolicitud(int idp) throws Exception {
+
+        conexionDB x = new conexionDB();
+        String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_PRIM WHERE SOLICITUD="+idp;
+        ResultSet r= x.consultar(consulta);
+        
+        
+            if(r.next())
+            {
+                id=Integer.parseInt(r.getString("ID"));
+                emailOferente=r.getString("EMAIL_OFERENTE");
+                emailIntermediario=r.getString("EMAIL_INTERMEDIARIO");
+                nitValor=Long.parseLong(r.getString("NIT_VALOR"));
+                nomValor=r.getString("NOM_VALOR");
+                fecha= r.getString("FECHA");
+                try {
+                    solicitud=Integer.parseInt(r.getString("SOLICITUD"));
+                } catch (Exception e) {
+                    solicitud= null;             
+                }
+                
+                 try {
+                   precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
+                } catch (Exception e) {
+                   precioUnidad=null;     
+                } 
+                 
+                 try {
+                    cantidad=Integer.parseInt(r.getString("CANTIDAD"));
+                } catch (Exception e) {
+                    cantidad= null;             
+                }
+              }
+            else 
+            {
+                throw new Exception("Se totea:"+consulta);
+            }
+        r.close();
+        x.close();
+        return this;
     }
     private int id;
     private String emailOferente;
@@ -33,6 +72,10 @@ public class OperacionEsperaPrim
     private String fecha;
      private Integer solicitud;
 
+       public OperacionEsperaPrim ()
+            {
+                
+            }
     public OperacionEsperaPrim(int idp) throws Exception 
     {
         conexionDB x = new conexionDB();
@@ -78,10 +121,7 @@ public class OperacionEsperaPrim
         
     }
 
-    public void setSolicitud(Integer solicitud) {
-        this.solicitud = solicitud;
-        String sentencia = "UPDATE OPERACION_ESPERA_PRIM SET SOLICITUD="+solicitud +" WHERE ID="+id;
-    }
+
 
     public Integer getSolicitud() {
         return solicitud;
@@ -127,7 +167,30 @@ public class OperacionEsperaPrim
          String consulta="DELETE FROM OPERACIONES_EN_ESPERA_PRIM WHERE ID="+idp  ;
        return x.actualizarCrear(consulta);
     }
-    
+     public boolean setSolicitud(Integer solicitud) {
+        this.solicitud = solicitud;
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_PRIM SET SOLICITUD ='"+solicitud+"' WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo;
+    }
+      public boolean setCantidad(Integer cantidad) {
+        this.solicitud = solicitud;
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_PRIM SET CANTIDAD ='"+cantidad+"' WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo;
+    }
+    public boolean setSolicitudNull(Integer solicitud) {
+        this.solicitud = solicitud;
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_PRIM SET SOLICITUD = NULL WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo ;
+    }
     
     public int getId() {
         return id;

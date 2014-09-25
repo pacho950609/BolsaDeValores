@@ -120,7 +120,7 @@ public class SolicitudCompra
     }
         
 
-    public static boolean insertarSolicitudPrimaria( String nombreValor, long nit, int cantidad, 
+    public static int insertarSolicitudPrimaria( String nombreValor, long nit, int cantidad, 
             double precioUnitario, String emailIntCom , String emailCom, String emailIntVen,
             String emailVen )
     {
@@ -137,7 +137,7 @@ public class SolicitudCompra
                             maximoid.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
         
         boolean res= x.actualizarCrear("INSERT INTO SOLICITUDES_COMPRA_PRIM"
@@ -145,10 +145,13 @@ public class SolicitudCompra
                 +emailIntCom+"','"+emailCom+"','"+emailIntVen+"','"+emailVen+"', (SELECT SYSDATE FROM DUAL))");
         
         x.close();
-        return res;
+        if(res)
+            return nuevoid;
+        else 
+            return -1;
     } 
     
-    public static boolean insertarSolicitudSecundaria( String nombreValor, long nit, int cantidad, 
+    public static int insertarSolicitudSecundaria( String nombreValor, long nit, int cantidad, 
             double precioUnitario, String emailIntCom , String emailCom, String emailIntVen,
             String emailVen )
     {
@@ -165,14 +168,17 @@ public class SolicitudCompra
                             maximoid.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
         boolean res= x.actualizarCrear("INSERT INTO SOLICITUDES_COMPRA_SEC"
          + " VALUES ("+nuevoid+", '"+nombreValor+"', "+nit+", "+cantidad+", "+precioUnitario+", '"
                 +emailIntCom+"','"+emailCom+"','"+emailIntVen+"','"+emailVen+"', (SELECT SYSDATE FROM DUAL))");
         
         x.close();
-        return res;
+         if(res)
+            return nuevoid;
+        else 
+            return -1;
     } 
    
     

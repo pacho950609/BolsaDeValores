@@ -38,7 +38,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
 	  
 	    }
 		
-    protected void doPost( HttpServletRequest request, HttpServletResponse response )   
+    protected void doPost( HttpServletRequest request, HttpServletResponse response )  
     {
 
         try{
@@ -64,8 +64,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
 
  }
 
-    private void iniciarSesion(String email, PrintWriter respuesta, ResultSet rtaCompraSec, conexionDB x) 
-    {
+    private void iniciarSesion(String email, PrintWriter respuesta, ResultSet rtaCompraSec, conexionDB x) {
           try {
               imprimirHeader(respuesta);
               imprimirComprasSecundario(rtaCompraSec, respuesta);
@@ -194,7 +193,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Email Oferente</th>\r\n" );
                     respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Nompbre empresa</th>\r\n" );
                     respuesta.write( "                  <th>Valor</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
@@ -214,7 +213,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                  respuesta.write("<input type=\"hidden\" value=\""+TRANSAR_COMPRA+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("EMAIL_INVER")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("EMAIL_INTER")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(rtaCompraSec.getString("NIT_VALOR"))+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("NOM_VALOR")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.getString("CANTIDAD")+"</td>\r\n" );
@@ -241,7 +240,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                     respuesta.write( "              <thead>\r\n" );
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Tipo de valor </th>\r\n" );
-                    respuesta.write( "                  <th>Nit del valor</th>\r\n" );
+                    respuesta.write( "                  <th>Empresa</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Email inter</th>\r\n" );
@@ -262,7 +261,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                   respuesta.write("<input type=\"hidden\" value=\""+rtaCompraSec.get(i).getId()+"\" name=\"id\"/>");
                   respuesta.write("<input type=\"hidden\" value=\""+ACEPTAR_SOLICITUD_PRIM+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rtaCompraSec.get(i).getNomValor()+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rtaCompraSec.get(i).getNitValor()+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(rtaCompraSec.get(i).getNitValor()+"")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.get(i).getCantidad()+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.get(i).getPrecioUnidad()+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rtaCompraSec.get(i).getEmailIntCom()+"</td>\r\n" );
@@ -292,7 +291,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                     respuesta.write( "              <thead>\r\n" );
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Tipo de valor </th>\r\n" );
-                    respuesta.write( "                  <th>Nit del valor</th>\r\n" );
+                    respuesta.write( "                  <th>Empresa del valor</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Email inter</th>\r\n" );
@@ -313,7 +312,7 @@ public class ServletRegistrarOperacionBursatil extends  HttpServlet{
                   respuesta.write("<input type=\"hidden\" value=\""+r.getString("ID")+"\" name=\"id\"/>");
                   respuesta.write("<input type=\"hidden\" value=\""+ACEPTAR_SOLICITUD_SEC+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+r.getString("NOM_VALOR")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+r.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(r.getString("NIT_VALOR"))+"</td>\r\n" );
                   respuesta.write( "                  <td>"+r.getString("CANTIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+r.getString("PRECIO_UNITARIO")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+r.getString("EMAIL_INT_COM")+"</td>\r\n" );

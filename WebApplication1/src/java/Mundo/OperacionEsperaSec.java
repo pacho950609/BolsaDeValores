@@ -80,6 +80,53 @@ public class OperacionEsperaSec
         }
         
     }
+    public OperacionEsperaSec(){}
+    public OperacionEsperaSec obtenerPorIdSolicitud(int idp) 
+    {
+        conexionDB x = new conexionDB();
+        String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_SEC WHERE SOLICITUD="+idp;
+        ResultSet r= x.consultar(consulta);
+        
+        try {
+            if(r.next())
+            {
+                id=idp;
+                emailInversionista=r.getString("EMAIL_INVER");
+                emailIntermediario=r.getString("EMAIL_INTER");
+                nitValor=Long.parseLong(r.getString("NIT_VALOR"));
+                nomValor=r.getString("NOM_VALOR");
+                precioUnidad=Double.parseDouble(r.getString("PRECIO_UNIDAD"));
+                try {
+                    cantidad=Integer.parseInt(r.getString("CANTIDAD"));
+                } catch (Exception e) {
+                    cantidad=null;
+                }
+                    
+                fecha= r.getString("FECHA");
+                 try {
+                     precio=Double.parseDouble(r.getString("PRECIO"));
+                } catch (Exception e) {
+                    precio=null;
+                }
+                try {
+                    solicitud=r.getString("SOLICITUD");
+                } catch (Exception e) {
+                    solicitud= null;
+                }
+
+               tipoOperacion= r.getString("TIPO_OPERACION");
+            r.close();
+            }
+            else 
+            {
+                 throw new Exception("Se totea:"+ consulta);
+            }
+        } catch (Exception ex) {
+           
+        }
+        return this;
+    }
+    
 
     public OperacionEsperaSec(int id, String emailIntermediario, 
             String emailInversionista, long nitValor, String nomValor, 
@@ -120,7 +167,10 @@ public class OperacionEsperaSec
      public static boolean eliminarOperacion(int idp) {
         conexionDB x = new conexionDB();
          String consulta="DELETE FROM OPERACIONES_EN_ESPERA_SEC WHERE ID="+idp  ;
-       return x.actualizarCrear(consulta);
+        
+         boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo ;
     }
     
     
@@ -146,6 +196,23 @@ public class OperacionEsperaSec
 
     public double getPrecioUnidad() {
         return precioUnidad;
+    }
+
+    public boolean setSolicitud(String solicitud) {
+        this.solicitud = solicitud;
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_SEC SET SOLICITUD ='"+solicitud+"' WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo;
+    }
+    public boolean setSolicitudNull(String solicitud) {
+        this.solicitud = solicitud;
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_SEC SET SOLICITUD = NULL WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo ;
     }
 
     public Integer getCantidad() {

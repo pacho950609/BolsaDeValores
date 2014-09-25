@@ -9,6 +9,8 @@ import Conexion.conexionDB;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.taglibs.standard.lang.jstl.Coercions;
 
 /**
@@ -503,5 +505,21 @@ public class Consultas {
          return lista;
      }
      
-     
+     public static String darNombreDeEmpresa(String nit)
+     {
+         String resp= null;
+        try {
+            conexionDB x = new conexionDB();
+            ResultSet r = x.consultar("SELECT NOMBRE FROM EMPRESA WHERE NIT = "+ nit);
+            
+            r.next();
+            resp =r.getString("NOMBRE");
+            r.close();
+            x.close();
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return resp;
+     }
 }

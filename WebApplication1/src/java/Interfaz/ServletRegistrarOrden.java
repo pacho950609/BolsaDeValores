@@ -10,7 +10,9 @@ import Mundo.Consultas;
 import Mundo.OperacionEsperaPrim;
 import Mundo.OperacionEsperaSec;
 import Mundo.OperacionRegPrim;
+import Mundo.OperacionRegSec;
 import Mundo.SolicitudCompra;
+import Mundo.ValoresDeInversionistas;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -115,7 +117,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Email Oferente</th>\r\n" );
                     respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Nombre empresa</th>\r\n" );
                     respuesta.write( "                  <th>Valor</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
@@ -135,7 +137,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                   respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_PRIM+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rta.getString("EMAIL_OFERENTE")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("EMAIL_INTERMEDIARIO")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(rta.getString("NIT_VALOR"))+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
@@ -169,7 +171,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Email Inversionista</th>\r\n" );
                     respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Empresa del vaor</th>\r\n" );
                     respuesta.write( "                  <th>Valor</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
@@ -189,7 +191,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                   respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_SEC+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rta1.getString("EMAIL_INVER")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("EMAIL_INTER")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta1.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(rta1.getString("NIT_VALOR"))+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("NOM_VALOR")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("CANTIDAD")+"</td>\r\n" );
@@ -234,7 +236,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Email Oferente</th>\r\n" );
                     respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Nombre Empresa</th>\r\n" );
                     respuesta.write( "                  <th>Valor</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
@@ -254,7 +256,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                   respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_PRIM+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rta.getString("EMAIL_OFERENTE")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("EMAIL_INTERMEDIARIO")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(rta.getString("NIT_VALOR"))+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("NOM_VALOR")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta.getString("CANTIDAD")+"</td>\r\n" );
@@ -288,7 +290,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                     respuesta.write( "                <tr>\r\n" );
                     respuesta.write( "                  <th>Email Inversionista</th>\r\n" );
                     respuesta.write( "                  <th>Email Intermediario</th>\r\n" );
-                    respuesta.write( "                  <th>Nit</th>\r\n" );
+                    respuesta.write( "                  <th>Empresa</th>\r\n" );
                     respuesta.write( "                  <th>Valor</th>\r\n" );
                     respuesta.write( "                  <th>Precio Unidad</th>\r\n" );
                     respuesta.write( "                  <th>Cantidad</th>\r\n" );
@@ -308,7 +310,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
                   respuesta.write("<input type=\"hidden\" value=\""+SOLICITAR_COMPRA_SEC+"\" name=\"operacion\"/>");
                   respuesta.write( "                  <td>"+rta1.getString("EMAIL_INVER")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("EMAIL_INTER")+"</td>\r\n" );
-                  respuesta.write( "                  <td>"+rta1.getString("NIT_VALOR")+"</td>\r\n" );
+                  respuesta.write( "                  <td>"+Consultas.darNombreDeEmpresa(rta1.getString("NIT_VALOR"))+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("NOM_VALOR")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("PRECIO_UNIDAD")+"</td>\r\n" );
                   respuesta.write( "                  <td>"+rta1.getString("CANTIDAD")+"</td>\r\n" );
@@ -348,16 +350,57 @@ public class ServletRegistrarOrden extends  HttpServlet{
             SolicitudCompra s= SolicitudCompra.darsolicitudPrim(id);
             
             
-            OperacionEsperaPrim opPrim= OperacionEsperaPrim.obtenerPorIdSolicitud(id);
+            OperacionEsperaPrim opPrim= new OperacionEsperaPrim();
+            opPrim= opPrim.obtenerPorIdSolicitud(id);
+            OperacionEsperaSec opSec= new OperacionEsperaSec();
+            opSec= opSec.obtenerPorIdSolicitud(id);
             
             
+            int vender =opPrim.getCantidad();
+            int comprar= opSec.getCantidad();
+            
+            opPrim.setCantidad(vender-comprar);
+            OperacionEsperaSec.eliminarOperacion(opSec.getId());
+            
+            
+            //OperacionRegPrim.insertarOperacion(opPrim.getEmailOferente(),
+                    //opSec.getEmailInversionista(), 
+                   // opSec.getNitValor(), SOLICITAR_COMPRA_SEC, comprar, comprar, null);
+            
+            respuesta.write(opPrim.toString());
+            respuesta.write(opSec.toString());
             
         } catch (Exception ex) {
             respuesta.write(ex.getMessage());
         }
         }
         private void aceptarSolicitudSec(int id, PrintWriter respuesta, conexionDB x) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            SolicitudCompra s= SolicitudCompra.darsolicitudPrim(id);
+            
+            
+            OperacionEsperaPrim opPrim= new OperacionEsperaPrim();
+            opPrim= opPrim.obtenerPorIdSolicitud(id);
+            OperacionEsperaSec opSec= new OperacionEsperaSec();
+            opSec= opSec.obtenerPorIdSolicitud(id);
+            
+            
+            int vender =opPrim.getCantidad();
+            int comprar= opSec.getCantidad();
+            
+            opPrim.setCantidad(vender-comprar);
+            OperacionEsperaSec.eliminarOperacion(opSec.getId());
+            
+            
+            //OperacionRegSec.insertarOperacion(SOLICITAR_COMPRA_SEC, SOLICITAR_COMPRA_SEC, 
+                    //comprar, SOLICITAR_COMPRA_SEC, comprar, comprar, null);
+            
+            respuesta.write(opPrim.toString());
+            respuesta.write(opSec.toString());
+            
+        } catch (Exception ex) {
+            respuesta.write(ex.getMessage());
+        }
     }
 
         private void realizarSolicitudPrim(int idCompra, int idVenta, PrintWriter respuesta, conexionDB x) {
@@ -365,16 +408,32 @@ public class ServletRegistrarOrden extends  HttpServlet{
         try {
             OperacionEsperaPrim vendedor =new OperacionEsperaPrim(idVenta);
             OperacionEsperaSec comprador=  new OperacionEsperaSec(idCompra);
-            if(SolicitudCompra.insertarSolicitudPrimaria
-        (comprador.getNomValor(),vendedor.getNitValor(),comprador.getCantidad(),vendedor.getPrecioUnidad(),
+            int id =SolicitudCompra.insertarSolicitudPrimaria(comprador.getNomValor(),vendedor.getNitValor(),comprador.getCantidad(),vendedor.getPrecioUnidad(),
                 comprador.getEmailIntermediario(), comprador.getEmailInversionista(), vendedor.getEmailIntermediario()
-        ,       vendedor.getEmailOferente()))
+                ,vendedor.getEmailOferente());
+            
+            if(id!=-1&&comprador.setSolicitud(""+id)&&vendedor.setSolicitud(id))
             {
+                
+                try {
+                    ValoresDeInversionistas v= new ValoresDeInversionistas(comprador.getEmailInversionista(), comprador.getNitValor(), comprador.getNomValor());
+                    if(v.getCantidad()!=null)
+                    v.setCantidad(v.getCantidad()+comprador.getCantidad());
+                    else
+                    {
+                        int sum= (int)(comprador.getPrecio()/vendedor.getPrecioUnidad());
+                        v.setCantidad(v.getCantidad()+sum);
+                    }
+            } catch (Exception e) {
+                ValoresDeInversionistas.insertarValoresDeInversionistas(comprador.getEmailInversionista(),comprador.getNitValor() , comprador.getNomValor(), comprador.getCantidad());
+            }
+                
+                
              respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
                                 respuesta.write( "            <div class=\"panel-body\">\r\n" );
                                 respuesta.write( "              Orden realizada\r\n" );
                                 respuesta.write( "            </div>\r\n" );
-                                respuesta.write( "            <div class=\"panel-footer\">La solicitud se ingreso con exito al sistema</div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">La solicitud se ingreso con exito al sistema, el id es "+id +"</div>\r\n" );
                                 respuesta.write( "          </div>\r\n" );   
             }
             else
@@ -399,16 +458,31 @@ public class ServletRegistrarOrden extends  HttpServlet{
             try {
             OperacionEsperaSec vendedor =new OperacionEsperaSec(idVenta);
             OperacionEsperaSec comprador=  new OperacionEsperaSec(idCompra);
-            if(SolicitudCompra.insertarSolicitudSecundaria
-        (comprador.getNomValor(),vendedor.getNitValor(),comprador.getCantidad(),vendedor.getPrecioUnidad(),
+            int id =SolicitudCompra.insertarSolicitudSecundaria (comprador.getNomValor(),vendedor.getNitValor(),comprador.getCantidad(),vendedor.getPrecioUnidad(),
                 comprador.getEmailIntermediario(), comprador.getEmailInversionista(), vendedor.getEmailIntermediario()
-        ,       vendedor.getEmailInversionista()))
+                ,vendedor.getEmailInversionista());
+             if(id!=-1&&comprador.setSolicitud(""+id)&&vendedor.setSolicitud(id+""))
             {
+                
+                try {
+                    ValoresDeInversionistas v= new ValoresDeInversionistas(comprador.getEmailInversionista(), comprador.getNitValor(), comprador.getNomValor());
+                    if(v.getCantidad()!=null)
+                    v.setCantidad(v.getCantidad()+comprador.getCantidad());
+                    else
+                    {
+                        int sum= (int)(comprador.getPrecio()/vendedor.getPrecioUnidad());
+                        v.setCantidad(v.getCantidad()+sum);
+                    }
+            } catch (Exception e) {
+                ValoresDeInversionistas.insertarValoresDeInversionistas(comprador.getEmailInversionista(),comprador.getNitValor() , comprador.getNomValor(), comprador.getCantidad());
+            }
+                
+                
              respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
                                 respuesta.write( "            <div class=\"panel-body\">\r\n" );
                                 respuesta.write( "              Orden realizada\r\n" );
                                 respuesta.write( "            </div>\r\n" );
-                                respuesta.write( "            <div class=\"panel-footer\">La solicitud se ingreso con exito al sistema</div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">La solicitud se ingreso con exito al sistema, el id es "+id +"</div>\r\n" );
                                 respuesta.write( "          </div>\r\n" );   
             }
             else

@@ -24,14 +24,14 @@ public class ValoresDeInversionistas
     private String nomValor;
     private int cantidad;
    
-    public ValoresDeInversionistas(String email, int nitValor,String nomValor) 
+    public ValoresDeInversionistas(String email, long nitValor,String nomValor) throws SQLException 
     {
         conexionDB x = new conexionDB();
         String consulta = "SELECT * FROM VALORES_DE_INVERSIONISTAS WHERE NIT_VALOR="
                 +nitValor+" AND EMAIL='"+email+"' AND NOM_VALOR='"+ nomValor+"'";
         ResultSet r= x.consultar(consulta);
         
-        try {
+       
             if(r.next())
             {
               
@@ -42,15 +42,13 @@ public class ValoresDeInversionistas
               
             
             }
-            else 
-            {
+            
                 
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(OperacionEsperaPrim.class.getName()).log(Level.SEVERE, null, ex);
-        }
+           
         
     }
+    
+    
 
     @Override
     public String toString() {
@@ -68,7 +66,7 @@ public class ValoresDeInversionistas
 
     
     
-    public static boolean insertarValoresDeInversionistas( String email, int nitValor, String nomValor, int cantidad) {
+    public static boolean insertarValoresDeInversionistas( String email, long nitValor, String nomValor, int cantidad) {
         conexionDB x = new conexionDB();
          String consulta="INSERT INTO VALORES_DE_INVERSIONISTAS VALUES("
                                     +nitValor
@@ -78,6 +76,15 @@ public class ValoresDeInversionistas
                                     +"')";
        return x.actualizarCrear(consulta);
     }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+        
+        conexionDB x = new conexionDB();
+         String consulta="UPDATE VALORES_DE_INVERSIONISTAS SET CANTIDAD= "+cantidad+" WHERE NIT_VALOR= "+nitValor+" AND NOM_VALOR= '"+nomValor+"' AND EMAIL= '"+email;
+         
+    }
+    
     
      public static boolean eliminarValoresDeInversionistas(String email, int nitValor,String nomValor) {
         conexionDB x = new conexionDB();
@@ -102,7 +109,7 @@ public class ValoresDeInversionistas
 
    
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
