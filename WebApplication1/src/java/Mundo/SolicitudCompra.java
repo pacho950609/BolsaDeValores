@@ -119,6 +119,24 @@ public class SolicitudCompra
         return s;
     }
         
+    public static boolean eliminarSolicitudPrim(int idp) throws Exception 
+    {
+        conexionDB x = new conexionDB();
+        String consulta = "DELETE FROM SOLICITUDES_COMPRA_PRIM WHERE ID="+idp;
+        boolean r= x.actualizarCrear(consulta);    
+        x.close();
+        return r;
+        
+    }
+    public static boolean eliminarSolicitudSec(int idp) throws Exception 
+    {
+        conexionDB x = new conexionDB();
+        String consulta = "DELETE FROM SOLICITUDES_COMPRA_SEC WHERE ID="+idp;
+        boolean r= x.actualizarCrear(consulta);    
+        x.close();
+        return r;
+        
+    }
 
     public static int insertarSolicitudPrimaria( String nombreValor, long nit, int cantidad, 
             double precioUnitario, String emailIntCom , String emailCom, String emailIntVen,

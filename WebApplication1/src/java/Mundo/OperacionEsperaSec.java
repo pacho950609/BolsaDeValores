@@ -10,6 +10,7 @@ import Conexion.conexionDB;
 import com.sun.faces.taglib.html_basic.SelectOneListboxTag;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -81,13 +82,13 @@ public class OperacionEsperaSec
         
     }
     public OperacionEsperaSec(){}
-    public OperacionEsperaSec obtenerPorIdSolicitud(int idp) 
+    public OperacionEsperaSec obtenerPorIdSolicitud(int idp) throws SQLException 
     {
         conexionDB x = new conexionDB();
         String consulta = "SELECT * FROM OPERACIONES_EN_ESPERA_SEC WHERE SOLICITUD="+idp;
         ResultSet r= x.consultar(consulta);
         
-        try {
+        
             if(r.next())
             {
                 id=idp;
@@ -117,14 +118,38 @@ public class OperacionEsperaSec
                tipoOperacion= r.getString("TIPO_OPERACION");
             r.close();
             }
-            else 
-            {
-                 throw new Exception("Se totea:"+ consulta);
-            }
-        } catch (Exception ex) {
-           
-        }
+            
+        
         return this;
+    }
+
+     public boolean setCantidad(Integer cantidad) {
+        this.solicitud = solicitud;
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_SEC SET CANTIDAD ='"+cantidad+"' WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo;
+    }
+    public String getSolicitud() {
+        return solicitud;
+    }
+     public boolean setSolicitudNull() {
+        
+         conexionDB x = new conexionDB();
+         String consulta="UPDATE OPERACIONES_EN_ESPERA_SEC SET SOLICITUD = NULL WHERE ID="+id ;
+          boolean boo = x.actualizarCrear(consulta);
+          x.close();
+       return boo ;
+    }
+     public boolean eliminarOperacion() throws Exception 
+    {
+        conexionDB x = new conexionDB();
+        String consulta = "DELETE FROM OPERACIONES_EN_ESPERA_SEC WHERE ID="+id;
+        boolean r= x.actualizarCrear(consulta);    
+        x.close();
+        return r;
+        
     }
     
 

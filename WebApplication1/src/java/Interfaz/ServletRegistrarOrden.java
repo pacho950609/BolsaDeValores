@@ -9,15 +9,12 @@ import Conexion.conexionDB;
 import Mundo.Consultas;
 import Mundo.OperacionEsperaPrim;
 import Mundo.OperacionEsperaSec;
-import Mundo.OperacionRegPrim;
-import Mundo.OperacionRegSec;
 import Mundo.SolicitudCompra;
 import Mundo.ValoresDeInversionistas;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -346,61 +343,233 @@ public class ServletRegistrarOrden extends  HttpServlet{
         
         
         private void aceptarSolicitudPrim(int id, PrintWriter respuesta, conexionDB x) {
-        try {
-            SolicitudCompra s= SolicitudCompra.darsolicitudPrim(id);
+        
+            SolicitudCompra s= null;
+            OperacionEsperaPrim vendedor= null;
+            OperacionEsperaSec comprador= null;
+            try {
+                s= SolicitudCompra.darsolicitudPrim(id);
+            vendedor= new OperacionEsperaPrim();
+            vendedor= vendedor.obtenerPorIdSolicitud(id);
+            comprador= new OperacionEsperaSec();
+            comprador= comprador.obtenerPorIdSolicitud(id);
+            } catch (Exception e) {
+                
+                
+                 
+             respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">Error al obtener los datos de la solicitud</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+
+            }
             
+            if(vendedor==null||comprador==null)
+            {
+                respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error en datos de la solicitud\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No existen las compras y ventas asociadas a esta solicitud</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );    
+                                return;
+            }
             
-            OperacionEsperaPrim opPrim= new OperacionEsperaPrim();
-            opPrim= opPrim.obtenerPorIdSolicitud(id);
-            OperacionEsperaSec opSec= new OperacionEsperaSec();
-            opSec= opSec.obtenerPorIdSolicitud(id);
+            int vender =vendedor.getCantidad();
+            int comprar= comprador.getCantidad();
             
+            if(vender>comprar)
+            {
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No se puede realizar la transaccion, intente nuevamente</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+
+            }
+            else
+            {
+                vendedor.setCantidad(vender-comprar);
+                if(vendedor.getCantidad()==0)
+                {
+                    try {
+                        vendedor.eliminarOperacion();
+                        
+                    } catch (Exception ex) {
+                         respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error eliminando operacion de venta\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No se puede realizar la transaccion, intente de nuevo</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+                    }
+                }
+                 else
+                {
+                    vendedor.setSolicitudNull();
+                }
+                try {
+                    comprador.eliminarOperacion();
+                } catch (Exception ex) {
+                    
+                     respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error eliminando operacion de compra\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No se puede realizar la transaccion, intente de nuevo</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+                }
+                  try {
+                ValoresDeInversionistas v= new ValoresDeInversionistas(comprador.getEmailInversionista(), comprador.getNitValor(), comprador.getNomValor());
+                    if(v.getCantidad()!=null)
+                    v.setCantidad(v.getCantidad()+comprador.getCantidad());
+                    else
+                    {
+                        int sum= (int)(comprador.getPrecio()/vendedor.getPrecioUnidad());
+                        v.setCantidad(v.getCantidad()+sum);
+                    }
+            } 
+                  catch (Exception e) {
+                
+                ValoresDeInversionistas.insertarValoresDeInversionistas(comprador.getEmailInversionista(),comprador.getNitValor() , comprador.getNomValor(), comprador.getCantidad());
             
-            int vender =opPrim.getCantidad();
-            int comprar= opSec.getCantidad();
-            
-            opPrim.setCantidad(vender-comprar);
-            OperacionEsperaSec.eliminarOperacion(opSec.getId());
-            
-            
-            //OperacionRegPrim.insertarOperacion(opPrim.getEmailOferente(),
-                    //opSec.getEmailInversionista(), 
-                   // opSec.getNitValor(), SOLICITAR_COMPRA_SEC, comprar, comprar, null);
-            
-            respuesta.write(opPrim.toString());
-            respuesta.write(opSec.toString());
-            
-        } catch (Exception ex) {
-            respuesta.write(ex.getMessage());
-        }
+            }
+                          try {
+                 s.eliminarSolicitudPrim(id);
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Operacion exitosa\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">Se realizo la operacion correctamente</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" ); 
+             } catch (Exception ex) {
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">Error eliminando la solicitud</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" ); 
+                
+             } 
+                
+            }
         }
         private void aceptarSolicitudSec(int id, PrintWriter respuesta, conexionDB x) {
-        try {
-            SolicitudCompra s= SolicitudCompra.darsolicitudPrim(id);
+         SolicitudCompra s= null;
+            OperacionEsperaSec vendedor= null;
+            OperacionEsperaSec comprador= null;
+            try {
+                s= SolicitudCompra.darsolicitudPrim(id);
+            vendedor= new OperacionEsperaSec();
+            vendedor= vendedor.obtenerPorIdSolicitud(id);
+            comprador= new OperacionEsperaSec();
+            comprador= comprador.obtenerPorIdSolicitud(id);
+            } catch (Exception e) {
+                
+                
+                 
+             respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">Error al obtener los datos de la solicitud</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+
+            }
+             if(vendedor==null||comprador==null)
+            {
+                respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error en datos de la solicitud\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No existen las compras y ventas asociadas a esta solicitud</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );    
+                            return;
+            }
             
+            int vender =vendedor.getCantidad();
+            int comprar= comprador.getCantidad();
             
-            OperacionEsperaPrim opPrim= new OperacionEsperaPrim();
-            opPrim= opPrim.obtenerPorIdSolicitud(id);
-            OperacionEsperaSec opSec= new OperacionEsperaSec();
-            opSec= opSec.obtenerPorIdSolicitud(id);
+            if(vender>comprar)
+            {
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No se puede realizar la transaccion, la cantidad a comprar es superior a la de vender, intente nuevamente</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+
+            }
+            else
+            {
+                vendedor.setCantidad(vender-comprar);
+                if(vendedor.getCantidad()==0)
+                {
+                    try {
+                        vendedor.eliminarOperacion();
+                        
+                    } catch (Exception ex) {
+                         respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error eliminando operacion de venta\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No se puede realizar la transaccion, intente de nuevo</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+                    }
+                }
+                else
+                {
+                    vendedor.setSolicitudNull();
+                }
+                try {
+                    comprador.eliminarOperacion();
+                } catch (Exception ex) {
+                    
+                     respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error eliminando operacion de compra\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">No se puede realizar la transaccion, intente de nuevo</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" );   
+                }
+                  try {
+                ValoresDeInversionistas v= new ValoresDeInversionistas(comprador.getEmailInversionista(), comprador.getNitValor(), comprador.getNomValor());
+                    if(v.getCantidad()!=null)
+                    v.setCantidad(v.getCantidad()+comprador.getCantidad());
+                    else
+                    {
+                        int sum= (int)(comprador.getPrecio()/vendedor.getPrecioUnidad());
+                        v.setCantidad(v.getCantidad()+sum);
+                    }
+            } 
+                  catch (Exception e) {
+                
+                ValoresDeInversionistas.insertarValoresDeInversionistas(comprador.getEmailInversionista(),comprador.getNitValor() , comprador.getNomValor(), comprador.getCantidad());
             
-            
-            int vender =opPrim.getCantidad();
-            int comprar= opSec.getCantidad();
-            
-            opPrim.setCantidad(vender-comprar);
-            OperacionEsperaSec.eliminarOperacion(opSec.getId());
-            
-            
-            //OperacionRegSec.insertarOperacion(SOLICITAR_COMPRA_SEC, SOLICITAR_COMPRA_SEC, 
-                    //comprar, SOLICITAR_COMPRA_SEC, comprar, comprar, null);
-            
-            respuesta.write(opPrim.toString());
-            respuesta.write(opSec.toString());
-            
-        } catch (Exception ex) {
-            respuesta.write(ex.getMessage());
-        }
+            }
+             try {
+                 s.eliminarSolicitudSec(id);
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Operacion exitosa\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">Se realizo la operacion correctamente</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" ); 
+             } catch (Exception ex) {
+                  respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
+                                respuesta.write( "            <div class=\"panel-body\">\r\n" );
+                                respuesta.write( "              Error\r\n" );
+                                respuesta.write( "            </div>\r\n" );
+                                respuesta.write( "            <div class=\"panel-footer\">Error eliminando la solicitud</div>\r\n" );
+                                respuesta.write( "          </div>\r\n" ); 
+                
+             }
+                          
+                
+            }
     }
 
         private void realizarSolicitudPrim(int idCompra, int idVenta, PrintWriter respuesta, conexionDB x) {
@@ -414,19 +583,6 @@ public class ServletRegistrarOrden extends  HttpServlet{
             
             if(id!=-1&&comprador.setSolicitud(""+id)&&vendedor.setSolicitud(id))
             {
-                
-                try {
-                    ValoresDeInversionistas v= new ValoresDeInversionistas(comprador.getEmailInversionista(), comprador.getNitValor(), comprador.getNomValor());
-                    if(v.getCantidad()!=null)
-                    v.setCantidad(v.getCantidad()+comprador.getCantidad());
-                    else
-                    {
-                        int sum= (int)(comprador.getPrecio()/vendedor.getPrecioUnidad());
-                        v.setCantidad(v.getCantidad()+sum);
-                    }
-            } catch (Exception e) {
-                ValoresDeInversionistas.insertarValoresDeInversionistas(comprador.getEmailInversionista(),comprador.getNitValor() , comprador.getNomValor(), comprador.getCantidad());
-            }
                 
                 
              respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
@@ -464,20 +620,7 @@ public class ServletRegistrarOrden extends  HttpServlet{
              if(id!=-1&&comprador.setSolicitud(""+id)&&vendedor.setSolicitud(id+""))
             {
                 
-                try {
-                    ValoresDeInversionistas v= new ValoresDeInversionistas(comprador.getEmailInversionista(), comprador.getNitValor(), comprador.getNomValor());
-                    if(v.getCantidad()!=null)
-                    v.setCantidad(v.getCantidad()+comprador.getCantidad());
-                    else
-                    {
-                        int sum= (int)(comprador.getPrecio()/vendedor.getPrecioUnidad());
-                        v.setCantidad(v.getCantidad()+sum);
-                    }
-            } catch (Exception e) {
-                ValoresDeInversionistas.insertarValoresDeInversionistas(comprador.getEmailInversionista(),comprador.getNitValor() , comprador.getNomValor(), comprador.getCantidad());
-            }
-                
-                
+              
              respuesta.write( "           <div class=\"panel panel-primary\">\r\n" );
                                 respuesta.write( "            <div class=\"panel-body\">\r\n" );
                                 respuesta.write( "              Orden realizada\r\n" );

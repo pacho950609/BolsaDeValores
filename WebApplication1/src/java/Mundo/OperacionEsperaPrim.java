@@ -121,7 +121,15 @@ public class OperacionEsperaPrim
         
     }
 
-
+      public boolean eliminarOperacion() throws Exception 
+    {
+        conexionDB x = new conexionDB();
+        String consulta = "DELETE FROM OPERACIONES_EN_ESPERA_PRIM WHERE ID="+id;
+        boolean r= x.actualizarCrear(consulta);    
+        x.close();
+        return r;
+        
+    }
 
     public Integer getSolicitud() {
         return solicitud;
@@ -165,6 +173,7 @@ public class OperacionEsperaPrim
      public static boolean eliminarOperacion(int idp) {
         conexionDB x = new conexionDB();
          String consulta="DELETE FROM OPERACIONES_EN_ESPERA_PRIM WHERE ID="+idp  ;
+         x.close();
        return x.actualizarCrear(consulta);
     }
      public boolean setSolicitud(Integer solicitud) {
@@ -183,8 +192,8 @@ public class OperacionEsperaPrim
           x.close();
        return boo;
     }
-    public boolean setSolicitudNull(Integer solicitud) {
-        this.solicitud = solicitud;
+    public boolean setSolicitudNull() {
+        
          conexionDB x = new conexionDB();
          String consulta="UPDATE OPERACIONES_EN_ESPERA_PRIM SET SOLICITUD = NULL WHERE ID="+id ;
           boolean boo = x.actualizarCrear(consulta);
